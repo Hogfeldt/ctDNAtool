@@ -3,6 +3,7 @@ import attr
 import re
 import csv
 import py2bit
+from enum import Enum, auto
 
 from .transcript_annotation import (
     pull_tx_id,
@@ -60,11 +61,15 @@ def determine_TSS_and_format_data(tx_anno):
         [pull_tx_type(tx_anno)],
     )
 
-def preprocess_bin_genome_Mbp(genome_ref_file, output_file, mbp=1.0):
+class Chromosomes(Enum):
+    AUTOSOMES = auto()
+    AUTOSOMES_X = auto()
+
+def preprocess_bin_genome_Mbp(genome_ref_file, output_file, mbp=1.0, chromosomes=Chromosomes.AUTOSOMES_X):
     """ This function will given a genome reference file in .2bit format,
         create a bed file splitting the genome in bins of size mbp.
 
-        If the last bin of a chromosme is smaller than the given mbp, 
+        If the last bin of a chromosome is smaller than the given mbp, 
         the bin will be thrown away
 
         :param genome_ref_file: File path to a .2bit file
@@ -74,6 +79,8 @@ def preprocess_bin_genome_Mbp(genome_ref_file, output_file, mbp=1.0):
         :type output_file: str
         :param mbp: Bin size in Mbp.
         :type mbp:
+        :param chromosomes: Choose wich chromosomes to include in bed file.
+        :type Chromosomes:
     """
     # NOTE: If no output file path is given, the output should prob. be 
     #       outputtet on stdout. Nice for piping.
@@ -86,12 +93,18 @@ def preprocess_bin_genome_Mbp(genome_ref_file, output_file, mbp=1.0):
     with open(output_file, "w") as fp:
         bed_writer = csv.writer(fp, delimiter="\t")
         bed_writer.writerow(["#chrom", "start", "end", "name", "score", "strand"])
+        regexp = None
+        if chromosomes == Chromosomes.AUTOSOMES:
+            regexp = "chr[3-9]$|chr1[0-9]?$|chr2[0-2]?$"
+        elif chromosomes == Chromosomes.AUTOSOMES_X:
+            regexp = "chr[3-9]$|chr1[0-9]?$|chr2[0-2]?$|chrX$"
         for chr_name in chroms.keys():
-            length = int(chroms[chr_name])
-            MEGA = 10**6
-            pos_pairs = zip(range(0, length, bin_size), range(bin_size, length, bin_size))
-            for start, end in pos_pairs:
-                bed_writer.writerow([chr_name, start, end, "{}_{}".format(chr_name, start), 0, "+"])
+            if re.match(regexp, chr_name):
+                length = int(chroms[chr_name])
+                MEGA = 10**6
+                pos_pairs = zip(range(0, length, bin_size), range(bin_size, length, bin_size))
+                for start, end in pos_pairs:
+                    bed_writer.writerow([chr_name, start, end, "{}_{}".format(chr_name, start), 0, "+"])
     return output_file
 
 

@@ -33,6 +33,7 @@ def preprocess(annotation_file, region_size, bed_file, tss_file):
 @click.option("-o", "--output_file", default="genome_bins.bed")
 @click.option("-m", "--mbp", default=1.0)
 def genome_split(genome_ref_file, output_file, mbp):
+    #TODO: add option for switching between AUTOSOME_X and AUTOSOME
     preprocessor.preprocess_bin_genome_Mbp(genome_ref_file, output_file, mbp)
 
 
