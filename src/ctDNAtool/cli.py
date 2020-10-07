@@ -28,6 +28,13 @@ def cli():
 def preprocess(annotation_file, region_size, bed_file, tss_file):
     preprocessor.preprocess(annotation_file, region_size, bed_file, tss_file)
 
+@cli.command()
+@click.argument("genome_ref_file")
+@click.option("-o", "--output_file", default="genome_bins.bed")
+@click.option("-m", "--mbp", default=1.0)
+def genome_split(genome_ref_file, output_file, mbp):
+    preprocessor.preprocess_bin_genome_Mbp(genome_ref_file, output_file, mbp)
+
 
 @cli.command()
 @click.argument("bam_file")
