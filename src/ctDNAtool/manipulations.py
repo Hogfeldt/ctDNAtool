@@ -287,7 +287,7 @@ def collapse(sample_pairs, output_file, uint32=False):
     copyfile(index_file, determine_index_file_name(output_file))
     np.save(output_file, summary_sample)
 
-def binning_sliding_window(X, bin_size, stride):
+def stride_binning(X, bin_size, stride):
     n, m = X.shape
     n_bins = math.ceil((n - bin_size)/stride) + 1
     if (n - bin_size) % stride != 0:
@@ -317,6 +317,6 @@ def binning(sample_pair, output_file, bin_size, stride):
     # TODO: Also implement for sparse tensors or ndarray containing scipy sparse matrices
     sample_file, index_file = sample_pair
     X = np.load(sample_file)
-    R = binning_sliding_window(X, bin_size, stride)
+    R = stride_binning(X, bin_size, stride)
     np.save(output_file, R)
     return output_file 
