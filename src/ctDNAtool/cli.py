@@ -31,7 +31,7 @@ def preprocess(annotation_file, region_size, bed_file, tss_file):
 @cli.command()
 @click.argument("genome_ref_file")
 @click.option("-o", "--output_file", default="genome_bins.bed")
-@click.option("-m", "--mbp", default=1.0)
+@click.option("-m", "--mbp", default=1.0)   #TODO: this should only take values > 0
 def genome_split(genome_ref_file, output_file, mbp):
     #TODO: add option for switching between AUTOSOME_X and AUTOSOME
     preprocessor.preprocess_bin_genome_Mbp(genome_ref_file, output_file, mbp)
@@ -113,3 +113,14 @@ def cut_tails(input_matrix, index_file, output_file, cut, mode):
                   'right': manipulations.cut_tails_right,
                   }
     tail_funcs[mode](input_matrix, index_file, output_file, cut)
+
+@cli.command()
+@click.argument("input_matrix")
+@click.argument("index_file")
+@click.option("-o", "--output-file", default="binned_matrix.npy")
+@click.option("-b", "--bin-size", default=1, type=click.FloatRange(min=1))
+@click.option("-s", "--stride", defualt=1, type=click.FloatRange(min=1))
+def binning(input_matrix, index_file, output_file, bin_size, stride):
+    manipulations.binning((input_matrix, index_file), output_file, bin_size, stride)
+
+

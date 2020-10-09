@@ -5,6 +5,7 @@ from shutil import copyfile
 from functools import partial, reduce
 from itertools import tee, count
 from operator import add
+import math
 
 from .utils import tsv_reader, write_matrix_and_index_file, determine_index_file_name
 
@@ -269,7 +270,7 @@ def collapse(sample_pairs, output_file, uint32=False):
         corresponding index file.
 
         :param sample_pairs: List of pairs (file path to matrix/tensor, file path index file)
-        :type matrices: List((str,str))
+        :type sample_pairs: List((str,str))
         :param output_file: File path to the output file
         :type output_file: str
         :param uint32: If False numpy.dtype will be preserved, if True numpy.dtype will be changed to uint32
@@ -285,3 +286,37 @@ def collapse(sample_pairs, output_file, uint32=False):
         summary_sample = collapse_matrices(sample_files, dtype, uint32)
     copyfile(index_file, determine_index_file_name(output_file))
     np.save(output_file, summary_sample)
+
+def binning_sliding_window(X, bin_size, stride):
+    n, m = X.shape
+    n_bins = math.ceil((n - bin_size)/stride) + 1
+    if (n - bin_size) % stride != 0:
+        #TODO: The logging module will probably be prefered
+        print("WARNING: last bin is smaller than the given bin size")
+    R = np.zeros((n_bins, m))
+    for i in range(n_bins):
+        start = i * stride
+        end = start + bin_size
+        R[i] = np.sum(X[start:end], axis=0)
+    return R
+
+def binning(sample_pair, output_file, bin_size, stride):
+    """ This function will given a sample make an additive binning in the first axis.
+        The binning is a sliding window where the bin size and a stride parameter 
+        can be set.
+
+        :param sample_pair: (File path to the matrix/tensor, file path to the index file)
+        :type sample_pair:  (str, str)
+        :param output_file: File path to store the result
+        :type output_file:  str
+        :param bin_size:    Size of the bin
+        :type bin_size:     Integer
+        :param stride:      The step size of the sliding window
+        :type stride:       Integer
+    """
+    # TODO: Also implement for sparse tensors or ndarray containing scipy sparse matrices
+    sample_file, index_file = sample_pair
+    X = np.load(sample_file)
+    R = binning_sliding_window(X, bin_size, stride)
+    np.save(output_file, R)
+    return output_file 
