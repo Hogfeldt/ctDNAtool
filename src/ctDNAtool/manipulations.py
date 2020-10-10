@@ -300,6 +300,12 @@ def stride_binning(X, bin_size, stride):
         R[i] = np.sum(X[start:end], axis=0)
     return R
 
+def binning_update_index(index_file, stride, n_bins):
+    with open(index_file) as fp:
+        reader = tsv_reader(fp)
+        region_ids = list(map(second, reader))    
+    return [region_ids[i*stride] in i range(n_bins)]
+
 def binning(sample_pair, output_file, bin_size, stride):
     """ This function will given a sample make an additive binning in the first axis.
         The binning is a sliding window where the bin size and a stride parameter 
@@ -318,5 +324,5 @@ def binning(sample_pair, output_file, bin_size, stride):
     sample_file, index_file = sample_pair
     X = np.load(sample_file)
     R = stride_binning(X, bin_size, stride)
-    np.save(output_file, R)
-    return output_file 
+    index_pairs = zip(count(), binning_update_index(index_file, stride, R.shape[0]))
+    write_matrix_and_index_file(output_file, R, index_pairs)
