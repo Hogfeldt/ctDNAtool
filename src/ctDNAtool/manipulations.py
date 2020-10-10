@@ -303,8 +303,9 @@ def stride_binning(X, bin_size, stride):
 def binning_update_index(index_file, stride, n_bins):
     with open(index_file) as fp:
         reader = tsv_reader(fp)
+        _ = next(reader)    # skip header
         region_ids = list(map(second, reader))    
-    return [region_ids[i*stride] in i range(n_bins)]
+    return [region_ids[i*stride] for i in range(n_bins)]
 
 def binning(sample_pair, output_file, bin_size, stride):
     """ This function will given a sample make an additive binning in the first axis.
