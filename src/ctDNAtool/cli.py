@@ -118,8 +118,8 @@ def cut_tails(input_matrix, index_file, output_file, cut, mode):
 @click.argument("input_matrix")
 @click.argument("index_file")
 @click.option("-o", "--output-file", default="binned_matrix.npy")
-@click.option("-b", "--bin-size", default=1, type=click.FloatRange(min=1))
-@click.option("-s", "--stride", defualt=1, type=click.FloatRange(min=1))
+@click.option("-b", "--bin-size", default=1, type=click.IntRange(min=1))
+@click.option("-s", "--stride", default=1, type=click.IntRange(min=1))
 def binning(input_matrix, index_file, output_file, bin_size, stride):
     manipulations.binning((input_matrix, index_file), output_file, bin_size, stride)
 
