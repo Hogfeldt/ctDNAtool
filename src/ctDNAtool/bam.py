@@ -1,8 +1,6 @@
-#########################################################
-##  This class is based on the work of Tobias Røikjer, ##
-##  parts of code is taken from his Github Repository  ##
-##  NucCa (https://github.com/TobiasRoikjer/NucCa)     ##
-#########################################################
+#  This class is based on the work of Tobias Røikjer,
+#  parts of code is taken from his Github Repository
+#  NucCa (https://github.com/TobiasRoikjer/NucCa)
 import pysam
 import os
 import sys
