@@ -1,4 +1,3 @@
-import argparse
 import attr
 import re
 import csv
@@ -24,7 +23,7 @@ class Tx_annotation:
 
 
 def is_chrome_autosome(chrom):
-    return re.match(r"chr\d", chrom) != None
+    return re.match(r"chr\d", chrom) is not None
 
 
 def get_transcript_annotations(file_path):
@@ -105,7 +104,6 @@ def preprocess_bin_genome_Mbp(
         for chr_name in chroms.keys():
             if re.match(regexp, chr_name):
                 length = int(chroms[chr_name])
-                MEGA = 10 ** 6
                 pos_pairs = zip(
                     range(0, length, bin_size), range(bin_size, length, bin_size)
                 )

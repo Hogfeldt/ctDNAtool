@@ -38,7 +38,7 @@ def load_transcription_start_sites(input_file):
     TSSs = list()
     with open(input_file) as fp:
         tsv_reader = csv.reader(fp, delimiter="\t")
-        header = next(tsv_reader)
+        _ = next(tsv_reader)  # get rid of header
         for line in tsv_reader:
             tss = TranscriptionStartSite(
                 line[0],

@@ -1,4 +1,3 @@
-import argparse
 import numpy as np
 import filecmp
 from shutil import copyfile
@@ -40,10 +39,9 @@ def unzip_pair_iter(it):
 
 
 def get_id_index_pair_iters_from_ids(index_map, ids):
-
-    pairing = lambda index_map, row_id: (row_id, index_map[row_id])
-
-    pair_iter = map(partial(pairing, index_map), ids)
+    pair_iter = map(
+        partial(lambda index_map, row_id: (row_id, index_map[row_id]), index_map), ids
+    )
     ids_iter, index_iter = unzip_pair_iter(pair_iter)
     new_index_id_pairs = zip(count(), ids_iter)
     new_old_index_pairs = zip(count(), index_iter)
@@ -92,8 +90,12 @@ def row_coverage_pairs(A):
     return map(partial(row_cov_pair, A), range(n))
 
 
-first = lambda pair: pair[0]
-second = lambda pair: pair[1]
+def first(pair):
+    pair[0]
+
+
+def second(pair):
+    pair[1]
 
 
 def pair_inside_limits(lower, upper, pair):
@@ -101,10 +103,9 @@ def pair_inside_limits(lower, upper, pair):
 
 
 def get_id_index_pair_iters_from_indexs(ids_map, indexs):
-
-    pairing = lambda ids_map, index: (ids_map[index], index)
-
-    pair_iter = map(partial(pairing, ids_map), indexs)
+    pair_iter = map(
+        partial(lambda ids_map, index: (ids_map[index], index), ids_map), indexs
+    )
     ids_iter, index_iter = unzip_pair_iter(pair_iter)
     new_index_id_pairs = zip(count(), ids_iter)
     new_old_index_pairs = zip(count(), index_iter)
@@ -208,9 +209,11 @@ def first_true(pred_func, it):
 
 
 def assert_index_files_are_identical(index_files):
-    not_none = lambda x: x != None
+    def not_none(x):
+        x is not None
+
     ground_truth = first_true(not_none, index_files)
-    if ground_truth == None:
+    if ground_truth is None:
         print("Warning: No index files found")
         return None
     filtered_index_files = list(filter(not_none, index_files))

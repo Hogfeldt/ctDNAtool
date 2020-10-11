@@ -12,7 +12,7 @@ class Tx_annotation:
 
 
 def is_chrome_autosome(chrom):
-    return re.match(r"chr\d", chrom) != None
+    return re.match(r"chr\d", chrom) is not None
 
 
 def pull_tx_id(anno_obj):
