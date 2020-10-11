@@ -6,7 +6,7 @@ def setup_test_env(session):
     session.run("pip", "install", "--no-deps", "--editable", ".")
 
 
-@nox.session(python=["3.5", "3.6", "3.7", "3.8"])
+@nox.session(python=["3.6", "3.7", "3.8"])
 def test(session):
     setup_test_env(session)
     session.run("pytest", "--doctest-modules", "test/")
