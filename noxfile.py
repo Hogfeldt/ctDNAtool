@@ -8,8 +8,8 @@ def setup_test_env(session):
 
 @nox.session(python=["3.5", "3.6", "3.7", "3.8"])
 def test(session):
-    #setup_test_env(session)
-    pass
+    setup_test_env(session)
+    session.run("pytest", "--doctest-modules", "test/")
 
 
 @nox.session(python="3.8")
