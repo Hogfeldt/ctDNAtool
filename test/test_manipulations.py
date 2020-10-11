@@ -43,8 +43,8 @@ class Test_stride_binning:
         stride = 2
         R = mut.stride_binning(X, bin_size, stride)
         T = np.array([1 for _ in range(10 * 5)], dtype=X.dtype).reshape((10, 5))
-        # print(R)
-        # print(T)
+        print(R)
+        print(T)
         assert np.array_equal(R, T) is True
 
     def test_last_bin_exceeds_array(self):
