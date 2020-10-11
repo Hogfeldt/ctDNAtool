@@ -1,11 +1,10 @@
-from unittest import TestCase
 from click.testing import CliRunner
 
 import ctDNAtool.cli as cli
 
 
-class Test_cli(TestCase):
+class Test_cli:
     def test_help(self):
         runner = CliRunner()
         result = runner.invoke(cli.cli)
-        self.assertTrue(result.exit_code == 0)
+        assert result.exit_code == 0
