@@ -11,6 +11,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@1.0.0
       - uses: excitedleigh/setup-nox@0.1.0
       - name: Run tests
         run: nox
