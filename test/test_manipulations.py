@@ -39,7 +39,9 @@ class Test_stride_binning(TestCase):
         bin_size = 5
         stride = 2
         R = mut.stride_binning(X, bin_size, stride)
-        T = np.array([5 for _ in range(8 * 5)] + [4 for _ in range(5)], dtype=X.dtype).reshape((9, 5))
+        T = np.array(
+            [5 for _ in range(8 * 5)] + [4 for _ in range(5)], dtype=X.dtype
+        ).reshape((9, 5))
         self.assertTrue(np.array_equal(R, T))
 
     def test_binsize_less_stride(self):
