@@ -27,17 +27,17 @@ class BAM:
         for read in self.bam_file.fetch(
             contig=chrom, start=region_start, stop=region_end
         ):
-            if (
-                read.is_duplicate
-                or read.is_secondary
-                or read.is_supplementary
-            ):
+            if read.is_duplicate or read.is_secondary or read.is_supplementary:
                 continue
 
             query_name = read.query_name
 
             if query_name not in mem:
-                mem[query_name] = (read.reference_start, read.reference_end, read.is_reverse)
+                mem[query_name] = (
+                    read.reference_start,
+                    read.reference_end,
+                    read.is_reverse,
+                )
             else:
                 mem_start, mem_end, mem_reverse = mem[query_name]
                 del mem[query_name]
@@ -58,8 +58,8 @@ class BAM:
 
                 if start < end:
                     continue
-                #start = min(read.reference_start, mem_start)
-                #end = max(read.reference_end, mem_end)
+                # start = min(read.reference_start, mem_start)
+                # end = max(read.reference_end, mem_end)
 
                 yield read.reference_name, start, end
 
@@ -69,11 +69,7 @@ class BAM:
         for read in self.bam_file.fetch(
             contig=chrom, start=region_start, stop=region_end
         ):
-            if (
-                read.is_duplicate
-                or read.is_secondary
-                or read.is_supplementary
-            ):
+            if read.is_duplicate or read.is_secondary or read.is_supplementary:
                 continue
             elif not read.is_paired:
                 yield read.reference_name, read.reference_start, read.reference_end

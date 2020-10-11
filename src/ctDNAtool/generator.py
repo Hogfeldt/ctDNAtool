@@ -63,23 +63,23 @@ def add_fragment(A, start, end, i, k):
 
 
 def generate_end_length_tensor(bam_file, bed_file, output_file, max_length):
-    """ Creates a tensor where each matrix represents a region from the bed file,
-        the matrix columns are bp positions in the region and rows are are lengths
-        from 0 to max_length.
-        The size of the tensor is (n x max_length x region_size) where n is the number 
-        of regions in the bed file.
-        Data is read length counts, so that a_nij is the number of reads in region n, 
-        length i with position j.
+    """Creates a tensor where each matrix represents a region from the bed file,
+    the matrix columns are bp positions in the region and rows are are lengths
+    from 0 to max_length.
+    The size of the tensor is (n x max_length x region_size) where n is the number
+    of regions in the bed file.
+    Data is read length counts, so that a_nij is the number of reads in region n,
+    length i with position j.
 
-        :param bam_file: File path to the bam sample file
-        :type bam_file: str
-        :param bed_file: File path to the bed file, which can be compiled by the preprocessing function
-        :type bed_file: str
-        :param output_file: File path to the output file
-        :type output_file: str
-        :param max_length: Maximum read length to be counted
-        :type max_length: int > 0
-        :returns:  None
+    :param bam_file: File path to the bam sample file
+    :type bam_file: str
+    :param bed_file: File path to the bed file, which can be compiled by the preprocessing function
+    :type bed_file: str
+    :param output_file: File path to the output file
+    :type output_file: str
+    :param max_length: Maximum read length to be counted
+    :type max_length: int > 0
+    :returns:  None
     """
     bed_list = load_bed_file(bed_file)
     region_size = bed_list[0].end - bed_list[0].start
@@ -107,22 +107,22 @@ def generate_end_length_tensor(bam_file, bed_file, output_file, max_length):
 
 
 def generate_length_matrix(bam_file, bed_file, output_file, max_length=500):
-    """ Creates a matrix where each row represents a region from the bed file
-        and the columns are read lengths from 0 to max_length.
-        The size of the matrix is (n x max_length) where n is the number of regions
-        in the bed file.
-        Data is read length counts, so that a_ij is the number of reads in region i, 
-        with length j.
+    """Creates a matrix where each row represents a region from the bed file
+    and the columns are read lengths from 0 to max_length.
+    The size of the matrix is (n x max_length) where n is the number of regions
+    in the bed file.
+    Data is read length counts, so that a_ij is the number of reads in region i,
+    with length j.
 
-        :param bam_file: File path to the bam sample file
-        :type bam_file: str
-        :param bed_file: File path to the bed file, which can be compiled by the preprocessing function
-        :type bed_file: str
-        :param output_file: File path to the output file
-        :type output_file: str
-        :param max_length: Maximum read length to be counted
-        :type max_length: int > 0
-        :returns:  None
+    :param bam_file: File path to the bam sample file
+    :type bam_file: str
+    :param bed_file: File path to the bed file, which can be compiled by the preprocessing function
+    :type bed_file: str
+    :param output_file: File path to the output file
+    :type output_file: str
+    :param max_length: Maximum read length to be counted
+    :type max_length: int > 0
+    :returns:  None
     """
     bed_list = load_bed_file(bed_file)
     matrix = np.zeros((len(bed_list), max_length), dtype=np.uint16)
@@ -140,20 +140,20 @@ def generate_length_matrix(bam_file, bed_file, output_file, max_length=500):
 
 
 def generate_read_ends_matrix(bam_file, bed_file, output_file):
-    """ Creates a matrix where each row represents a region with a TSS in the
-        center of the region and the columns represents base pair positions.
-        The size of the matrix is (n x m) where n is the number of regions/TSS
-        and m is the size og the region.
-        Data is read-end counts, so that a_ij is the number of read-ends in region
-        i at position j from region start.
+    """Creates a matrix where each row represents a region with a TSS in the
+    center of the region and the columns represents base pair positions.
+    The size of the matrix is (n x m) where n is the number of regions/TSS
+    and m is the size og the region.
+    Data is read-end counts, so that a_ij is the number of read-ends in region
+    i at position j from region start.
 
-        :param bam_file: File path to the bam sample file
-        :type bam_file: str
-        :param bed_file: File path to the bed file, which can be compiled by the preprocessing function
-        :type bed_file: str
-        :param output_file: File path to the output file
-        :type output_file: str
-        :returns:  None
+    :param bam_file: File path to the bam sample file
+    :type bam_file: str
+    :param bed_file: File path to the bed file, which can be compiled by the preprocessing function
+    :type bed_file: str
+    :param output_file: File path to the output file
+    :type output_file: str
+    :returns:  None
     """
     bed_list = load_bed_file(bed_file)
     region_size = bed_list[0].end - bed_list[0].start
@@ -175,20 +175,20 @@ def generate_read_ends_matrix(bam_file, bed_file, output_file):
 
 
 def generate_coverage_matrix(bam_file, bed_file, output_file):
-    """ Creates a matrix where each row represents a region with a TSS in the
-        center of the region and the columns represents base pair positions.
-        The size of the matrix is (n x m) where n is the number of regions/TSS
-        and m is the size og the region.
-        Data is read-depth/coverage, so that a_ij is the number of overlapping 
-        reads in region i at position j from region start.
+    """Creates a matrix where each row represents a region with a TSS in the
+    center of the region and the columns represents base pair positions.
+    The size of the matrix is (n x m) where n is the number of regions/TSS
+    and m is the size og the region.
+    Data is read-depth/coverage, so that a_ij is the number of overlapping
+    reads in region i at position j from region start.
 
-        :param bam_file: File path to the bam sample file
-        :type bam_file: str
-        :param bed_file: File path to the bed file, which can be compiled by the preprocessing function
-        :type bed_file: str
-        :param output_file: File path to the output file
-        :type output_file: str
-        :returns:  None
+    :param bam_file: File path to the bam sample file
+    :type bam_file: str
+    :param bed_file: File path to the bed file, which can be compiled by the preprocessing function
+    :type bed_file: str
+    :param output_file: File path to the output file
+    :type output_file: str
+    :returns:  None
     """
     bed_list = load_bed_file(bed_file)
     region_size = bed_list[0].end - bed_list[0].start

@@ -51,18 +51,18 @@ def get_id_index_pair_iters_from_ids(index_map, ids):
 
 
 def pick_subset(sample_file, index_file, output_file, ids):
-    """ Given a matrix/tensor and a list of row identifiers, create a 
-        new matrix/tensor which is a row-wise subset of the given matrix/tensor.
+    """Given a matrix/tensor and a list of row identifiers, create a
+    new matrix/tensor which is a row-wise subset of the given matrix/tensor.
 
-        :param sample_file: File path to the input sample
-        :type sample_file: str
-        :param index_file: File path to the index file which coresponds to the input matrix
-        :type index_file: str
-        :param output_file: File path to the output matrix
-        :type output_file: str
-        :param ids: List of row identifiers for the input matrix
-        :type ids: List[str]
-        :returns:  None
+    :param sample_file: File path to the input sample
+    :type sample_file: str
+    :param index_file: File path to the index file which coresponds to the input matrix
+    :type index_file: str
+    :param output_file: File path to the output matrix
+    :type output_file: str
+    :param ids: List of row identifiers for the input matrix
+    :type ids: List[str]
+    :returns:  None
     """
     sample = np.load(sample_file, allow_pickle=True)
     index_map = create_index_map(index_file)
@@ -148,55 +148,55 @@ def find_limits_right_cut(row_cov_pairs, cut):
 
 
 def cut_tails_both(matrix, index_file, output_file, cut=0.05):
-    """ Removes the left and right tail from the coverage distribution of the
-        matrix. The cuts based on a fraction given as cut.
-        If cut = 0.05 the top 5% and the bottom 5% will be removed.
+    """Removes the left and right tail from the coverage distribution of the
+    matrix. The cuts based on a fraction given as cut.
+    If cut = 0.05 the top 5% and the bottom 5% will be removed.
 
-        :param matrix_file: File path to the input matrix
-        :type matrix_file: str
-        :param index_file: File path to the index file which coresponds to the input matrix
-        :type index_file: str
-        :param output_file: File path to the output matrix
-        :type output_file: str
-        :param cut: Fraction to be removed
-        :type cut: 0 < int < 1
-        :returns:  None
+    :param matrix_file: File path to the input matrix
+    :type matrix_file: str
+    :param index_file: File path to the index file which coresponds to the input matrix
+    :type index_file: str
+    :param output_file: File path to the output matrix
+    :type output_file: str
+    :param cut: Fraction to be removed
+    :type cut: 0 < int < 1
+    :returns:  None
     """
     cut_tails(find_limits_double_cut, matrix, index_file, output_file, cut)
 
 
 def cut_tails_left(matrix, index_file, output_file, cut=0.05):
-    """ Removes the left tail from the coverage distribution of the matrix. 
-        The cut is based on a fraction given as cut.
-        If cut = 0.05 the bottom 5% will be removed.
+    """Removes the left tail from the coverage distribution of the matrix.
+    The cut is based on a fraction given as cut.
+    If cut = 0.05 the bottom 5% will be removed.
 
-        :param matrix_file: File path to the input matrix
-        :type matrix_file: str
-        :param index_file: File path to the index file which coresponds to the input matrix
-        :type index_file: str
-        :param output_file: File path to the output matrix
-        :type output_file: str
-        :param cut: Fraction to be removed
-        :type cut: 0 < int < 1
-        :returns:  None
+    :param matrix_file: File path to the input matrix
+    :type matrix_file: str
+    :param index_file: File path to the index file which coresponds to the input matrix
+    :type index_file: str
+    :param output_file: File path to the output matrix
+    :type output_file: str
+    :param cut: Fraction to be removed
+    :type cut: 0 < int < 1
+    :returns:  None
     """
     cut_tails(find_limits_left_cut, matrix, index_file, output_file, cut)
 
 
 def cut_tails_right(matrix, index_file, output_file, cut=0.05):
-    """ Removes the right tail from the coverage distribution of the matrix. 
-        The cut is based on a fraction given as cut.
-        If cut = 0.05 the top 5% will be removed.
+    """Removes the right tail from the coverage distribution of the matrix.
+    The cut is based on a fraction given as cut.
+    If cut = 0.05 the top 5% will be removed.
 
-        :param matrix_file: File path to the input matrix
-        :type matrix_file: str
-        :param index_file: File path to the index file which coresponds to the input matrix
-        :type index_file: str
-        :param output_file: File path to the output matrix
-        :type output_file: str
-        :param cut: Fraction to be removed
-        :type cut: 0 < int < 1
-        :returns:  None
+    :param matrix_file: File path to the input matrix
+    :type matrix_file: str
+    :param index_file: File path to the index file which coresponds to the input matrix
+    :type index_file: str
+    :param output_file: File path to the output matrix
+    :type output_file: str
+    :param cut: Fraction to be removed
+    :type cut: 0 < int < 1
+    :returns:  None
     """
     cut_tails(find_limits_right_cut, matrix, index_file, output_file, cut)
 
@@ -264,18 +264,18 @@ def determine_structure_and_dtype(sample_file):
 
 
 def collapse(sample_pairs, output_file, uint32=False):
-    """ This function will given a list matrix-index pairs or tensor-index paris, 
-        load in the samples one by one and collapse them upon each other value by value.
-        The final sample will be stored in the output file as a .npy file, with a 
-        corresponding index file.
+    """This function will given a list matrix-index pairs or tensor-index paris,
+    load in the samples one by one and collapse them upon each other value by value.
+    The final sample will be stored in the output file as a .npy file, with a
+    corresponding index file.
 
-        :param sample_pairs: List of pairs (file path to matrix/tensor, file path index file)
-        :type sample_pairs: List((str,str))
-        :param output_file: File path to the output file
-        :type output_file: str
-        :param uint32: If False numpy.dtype will be preserved, if True numpy.dtype will be changed to uint32
-        :type uint32: boolean
-        :returns:  None
+    :param sample_pairs: List of pairs (file path to matrix/tensor, file path index file)
+    :type sample_pairs: List((str,str))
+    :param output_file: File path to the output file
+    :type output_file: str
+    :param uint32: If False numpy.dtype will be preserved, if True numpy.dtype will be changed to uint32
+    :type uint32: boolean
+    :returns:  None
     """
     sample_files, index_files = list(zip(*sample_pairs))
     index_file = assert_index_files_are_identical(index_files)
@@ -287,11 +287,12 @@ def collapse(sample_pairs, output_file, uint32=False):
     copyfile(index_file, determine_index_file_name(output_file))
     np.save(output_file, summary_sample)
 
+
 def stride_binning(X, bin_size, stride):
     n, m = X.shape
-    n_bins = math.ceil((n - bin_size)/stride) + 1
+    n_bins = math.ceil((n - bin_size) / stride) + 1
     if (n - bin_size) % stride != 0:
-        #TODO: The logging module will probably be prefered
+        # TODO: The logging module will probably be prefered
         print("WARNING: last bin is smaller than the given bin size")
     R = np.zeros((n_bins, m))
     for i in range(n_bins):
@@ -300,26 +301,28 @@ def stride_binning(X, bin_size, stride):
         R[i] = np.sum(X[start:end], axis=0)
     return R
 
+
 def binning_update_index(index_file, stride, n_bins):
     with open(index_file) as fp:
         reader = tsv_reader(fp)
-        _ = next(reader)    # skip header
-        region_ids = list(map(second, reader))    
-    return [region_ids[i*stride] for i in range(n_bins)]
+        _ = next(reader)  # skip header
+        region_ids = list(map(second, reader))
+    return [region_ids[i * stride] for i in range(n_bins)]
+
 
 def binning(sample_pair, output_file, bin_size, stride):
-    """ This function will given a sample make an additive binning in the first axis.
-        The binning is a sliding window where the bin size and a stride parameter 
-        can be set.
+    """This function will given a sample make an additive binning in the first axis.
+    The binning is a sliding window where the bin size and a stride parameter
+    can be set.
 
-        :param sample_pair: (File path to the matrix/tensor, file path to the index file)
-        :type sample_pair:  (str, str)
-        :param output_file: File path to store the result
-        :type output_file:  str
-        :param bin_size:    Size of the bin
-        :type bin_size:     Integer
-        :param stride:      The step size of the sliding window
-        :type stride:       Integer
+    :param sample_pair: (File path to the matrix/tensor, file path to the index file)
+    :type sample_pair:  (str, str)
+    :param output_file: File path to store the result
+    :type output_file:  str
+    :param bin_size:    Size of the bin
+    :type bin_size:     Integer
+    :param stride:      The step size of the sliding window
+    :type stride:       Integer
     """
     # TODO: Also implement for sparse tensors or ndarray containing scipy sparse matrices
     sample_file, index_file = sample_pair
