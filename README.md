@@ -1,5 +1,7 @@
 # ctDNAtool
 
+![Run tests](https://github.com/Hogfeldt/ctDNAtool/workflows/Run%20tests/badge.svg)
+
 ## setup
 To install dependencies and install ctDNAtool in editable mode run:
 ```
