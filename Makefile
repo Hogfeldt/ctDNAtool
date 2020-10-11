@@ -1,9 +1,10 @@
 .PHONY: update-deps init update test
 
+# Consider --generate-hashes for pip-compile
 update-deps:
 	pip install --upgrade pip-tools pip setuptools
-	pip-compile --upgrade --build-isolation --generate-hashes --output-file requirements.txt
-	pip-compile --upgrade --build-isolation --generate-hashes --output-file requirements-dev.txt requirements-dev.in
+	pip-compile --upgrade --build-isolation  --output-file requirements.txt
+	pip-compile --upgrade --build-isolation  --output-file requirements-dev.txt requirements-dev.in
 
 init:
 	pip install --upgrade -r requirements.txt -r requirements-dev.txt
