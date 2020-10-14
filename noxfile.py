@@ -1,5 +1,6 @@
 import nox
 
+
 def setup_test_env(session):
     session.install("--upgrade", "pip", "setuptools")
     session.install("-r", "requirements.txt", "-r", "requirements-dev.txt")
