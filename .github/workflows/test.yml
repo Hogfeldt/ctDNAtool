@@ -1,5 +1,5 @@
-# inspiration from gwfforg/gwf
-name: Run tests
+# inspiration from gwforg/gwf
+name: Tests
 
 on:
   push:
@@ -13,5 +13,5 @@ jobs:
     steps:
       - uses: actions/checkout@1.0.0
       - uses: excitedleigh/setup-nox@0.1.0
-      - name: Run tests
+      - name: Tests
         run: nox
