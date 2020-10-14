@@ -3,6 +3,7 @@ import re
 import csv
 import py2bit
 from enum import Enum, auto
+from natsort import natsorted
 
 from .transcript_annotation import (
     pull_tx_id,
@@ -101,7 +102,7 @@ def preprocess_bin_genome_Mbp(
             regexp = "chr[3-9]$|chr1[0-9]?$|chr2[0-2]?$"
         elif chromosomes == Chromosomes.AUTOSOMES_X:
             regexp = "chr[3-9]$|chr1[0-9]?$|chr2[0-2]?$|chrX$"
-        for chr_name in chroms.keys():
+        for chr_name in natsorted(chroms.keys()):
             if re.match(regexp, chr_name):
                 length = int(chroms[chr_name])
                 pos_pairs = zip(
