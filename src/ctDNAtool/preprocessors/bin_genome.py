@@ -1,9 +1,9 @@
 from enum import Enum, auto
 import py2bit
-import csv
 from natsort import natsorted
 
 from .utils import is_autosome, is_autosome_or_x
+from ..utils import tsv_writer
 
 
 class Chromosomes(Enum):
@@ -47,7 +47,7 @@ def bin_genome_Mbp(
     finally:
         tb.close()
     with open(output_file, "w") as fp:
-        bed_writer = csv.writer(fp, delimiter="\t")
+        bed_writer = tsv_writer(fp)
         bed_writer.writerow(["#chrom", "start", "end", "name", "score", "strand"])
         for chr_name in natsorted(
             filter(chroms.keys(), key=select_chrom_test(chromosomes))
