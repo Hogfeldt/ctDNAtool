@@ -24,6 +24,7 @@ setup(
         # "matplotlib",   #3.2.1
         # "seaborn",      #0.10.1
         "scipy",  # 1.4.1
+        "natsort",
     ],
     entry_points={
         "console_scripts": ["ctDNAtool = ctDNAtool.cli:cli"],

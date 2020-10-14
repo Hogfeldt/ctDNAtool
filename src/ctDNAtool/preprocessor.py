@@ -3,6 +3,7 @@ import re
 import csv
 import py2bit
 from enum import Enum, auto
+from natsort import natsorted
 
 from .transcript_annotation import (
     pull_tx_id,
@@ -22,8 +23,12 @@ class Tx_annotation:
     additionals = attr.ib()
 
 
-def is_chrome_autosome(chrom):
-    return re.match(r"chr\d", chrom) is not None
+def is_autosome(chrom):
+    return re.match(r"chr[3-9]$|chr1[0-9]?$|chr2[0-2]?$", chrom) is not None
+
+
+def is_autosome_or_x(chrom):
+    return re.match(r"chr[3-9]$|chr1[0-9]?$|chr2[0-2]?$|chrX$", chrom) is not None
 
 
 def get_transcript_annotations(file_path):
@@ -34,7 +39,7 @@ def get_transcript_annotations(file_path):
             anno = line.replace("\n", "").split()
             if anno[2] != "transcript":  # line is not a transcript
                 continue
-            if is_chrome_autosome(anno[0]):
+            if is_autosome(anno[0]):
                 anno_obj = Tx_annotation(
                     anno[0], int(anno[3]), int(anno[4]), anno[6], anno[8]
                 )
@@ -64,6 +69,14 @@ def determine_TSS_and_format_data(tx_anno):
 class Chromosomes(Enum):
     AUTOSOMES = auto()
     AUTOSOMES_X = auto()
+
+
+def select_chrom_test(chroms):
+    CHROM_TESTS = {
+        Chromosomes.AUTOSOMES: is_autosome,
+        Chromosomes.AUTOSOMES_X: is_autosome_or_x,
+    }
+    return CHROM_TESTS.get(chroms)
 
 
 def preprocess_bin_genome_Mbp(
@@ -96,21 +109,17 @@ def preprocess_bin_genome_Mbp(
     with open(output_file, "w") as fp:
         bed_writer = csv.writer(fp, delimiter="\t")
         bed_writer.writerow(["#chrom", "start", "end", "name", "score", "strand"])
-        regexp = None
-        if chromosomes == Chromosomes.AUTOSOMES:
-            regexp = "chr[3-9]$|chr1[0-9]?$|chr2[0-2]?$"
-        elif chromosomes == Chromosomes.AUTOSOMES_X:
-            regexp = "chr[3-9]$|chr1[0-9]?$|chr2[0-2]?$|chrX$"
-        for chr_name in chroms.keys():
-            if re.match(regexp, chr_name):
-                length = int(chroms[chr_name])
-                pos_pairs = zip(
-                    range(0, length, bin_size), range(bin_size, length, bin_size)
+        for chr_name in natsorted(
+            filter(chroms.keys(), key=select_chrom_test(chromosomes))
+        ):
+            length = int(chroms[chr_name])
+            pos_pairs = zip(
+                range(0, length, bin_size), range(bin_size, length, bin_size)
+            )
+            for start, end in pos_pairs:
+                bed_writer.writerow(
+                    [chr_name, start, end, "{}_{}".format(chr_name, start), 0, "+"]
                 )
-                for start, end in pos_pairs:
-                    bed_writer.writerow(
-                        [chr_name, start, end, "{}_{}".format(chr_name, start), 0, "+"]
-                    )
     return output_file
 
 
