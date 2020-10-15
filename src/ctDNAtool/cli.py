@@ -66,10 +66,10 @@ def sample_sum(sample_files, output_file, uint32):
 
 
 @cli.command()
-@click.argument("samples_file")
+@click.argument("sample_file")
 @click.option("-o", "--output-file", default="collapsed_sample.pickle")
-def region_sum(sample_files, output_file):
-    manipulations.region_sum(sample_files, output_file)
+def region_sum(sample_file, output_file):
+    manipulations.region_sum(sample_file, output_file)
 
 
 @cli.command()
