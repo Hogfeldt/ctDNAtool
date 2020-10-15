@@ -51,7 +51,9 @@ def generate_length(bam_file, bed_file, output_file, max_length):
 def generate_length_end_seq(
     bam_file, bed_file, reference_genome, output_file, max_length, flank
 ):
-    generators.length_end_seqs(bam_file, bed_file, reference_genome, output_file, max_length, flank)
+    generators.length_end_seqs(
+        bam_file, bed_file, reference_genome, output_file, max_length, flank
+    )
 
 
 @cli.command()
