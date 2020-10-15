@@ -58,11 +58,18 @@ def generate_length_end_seq(
 
 @cli.command()
 @click.argument("samples_files", nargs=-1)
-@click.option("-o", "--output-file", default="collapsed_sample.pickle")
+@click.option("-o", "--output-file", default="collapsed_samples.pickle")
 @click.option("--uint32", is_flag=True)
 def sample_sum(sample_files, output_file, uint32):
     if len(sample_files) > 0:
         manipulations.sample_sum(sample_files, output_file, uint32)
+
+
+@cli.command()
+@click.argument("samples_file")
+@click.option("-o", "--output-file", default="collapsed_sample.pickle")
+def region_sum(sample_files, output_file):
+    manipulations.region_sum(sample_files, output_file)
 
 
 @cli.command()
