@@ -57,7 +57,7 @@ def generate_length_end_seq(
 
 
 @cli.command()
-@click.argument("samples_files", nargs=-1)
+@click.argument("sample_files", nargs=-1)
 @click.option("-o", "--output-file", default="collapsed_samples.pickle")
 @click.option("--uint32", is_flag=True)
 def sample_sum(sample_files, output_file, uint32):
