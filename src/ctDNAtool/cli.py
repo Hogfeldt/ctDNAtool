@@ -42,6 +42,21 @@ def generate_length(bam_file, bed_file, output_file, max_length):
 
 
 @cli.command()
+@click.argument("bam_file")
+@click.argument("bed_file")
+@click.argument("reference_genome")
+@click.option("-o", "--output-file", default="length_matrix.pickle")
+@click.option("-m", "--max-length", default=500, type=click.IntRange(min=1))
+@click.option("-f", "--flank", default=1, type=click.IntRange(min=1))
+def generate_length_end_seq(
+    bam_file, bed_file, reference_genome, output_file, max_length, flank
+):
+    generators.length_end_seqs(
+        bam_file, bed_file, reference_genome, output_file, max_length, flank
+    )
+
+
+@cli.command()
 @click.argument("samples_files", nargs=-1)
 @click.option("-o", "--output-file", default="collapsed_sample.pickle")
 @click.option("--uint32", is_flag=True)

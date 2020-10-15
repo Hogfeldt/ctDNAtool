@@ -29,7 +29,7 @@ class Data:
         with open(file_path, "wb") as fp:
             pickle.dump(data, fp)
 
-    def __determine_structure_and_dtype(data):
+    def __determine_structure_and_dtype(self, data):
         is_sparse = issparse(data[0])
         if is_sparse:
             dtype = data[0].dtype
