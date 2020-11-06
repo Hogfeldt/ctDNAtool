@@ -28,10 +28,8 @@ def length_matrix(bam_file, bed_file, output_file, max_length=500):
     bam = BAM(bam_file)
     id_lst = list()
     for i, region in enumerate(region_lst):
-        for reading in bam.pair_generator(region.chrom, region.start, region.end):
-            start = int(reading[1])
-            end = int(reading[2])
-            length = abs(end - start)
+        for read in bam.pair_generator(region.chrom, region.start, region.end):
+            length = abs(read.end - read.start)
             if length < max_length:
                 matrix[i, length] += 1
         id_lst.append(region.region_id)
