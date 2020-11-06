@@ -4,6 +4,15 @@
 import pysam
 import os
 import sys
+import attr
+
+
+@attr.s
+class Read:
+    ref_name = attr.ib()
+    start = attr.ib()
+    end = attr.ib()
+    start_is_first = attr.ib()
 
 
 class BAM:
@@ -35,9 +44,10 @@ class BAM:
                     read.reference_start,
                     read.reference_end,
                     read.is_reverse,
+                    read.is_read1,
                 )
             else:
-                mem_start, mem_end, mem_reverse = mem[query_name]
+                mem_start, mem_end, mem_reverse, mem_is_read1 = mem[query_name]
                 del mem[query_name]
                 if (
                     mem_start is None
@@ -50,16 +60,15 @@ class BAM:
                 if read.is_reverse:
                     start = mem_start
                     end = read.reference_end
+                    start_is_first = mem_is_read1
                 else:
                     start = read.reference_start
                     end = mem_end
+                    start_is_first = not mem_is_read1
 
                 if start < end:
                     continue
-                # start = min(read.reference_start, mem_start)
-                # end = max(read.reference_end, mem_end)
-
-                yield read.reference_name, start, end
+                yield Read(read.reference_name, int(start), int(end), start_is_first)
 
     def pair_generator_gabriel(self, chrom, region_start, region_end):
         mem = {}

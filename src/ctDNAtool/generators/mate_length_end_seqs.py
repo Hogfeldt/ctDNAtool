@@ -1,5 +1,4 @@
 import numpy as np
-from scipy.sparse import dok_matrix, csr_matrix
 import py2bit
 
 from .bed import load_bed_file
@@ -8,14 +7,14 @@ from .utils import seq_to_index, fetch_seq
 from ..data import Data
 
 
-def length_end_seqs(
+def mate_length_end_seqs(
     bam_file, bed_file, ref_genome_file, output_file, max_length=500, flank=1
 ):
-    """Create a tensor where the first dim. represents a region from the bed file,
-    the second dim. represent read lengths from 0 to max_length and the third dim.
-    represents the the concatenation of the sequenses at the fragment ends, taken
-    from the reference genome, endcoded as an index. Then length of an end sequence
-    is 2 times the flank parameter.
+    """Create a tensor where the first dim. represents a whether a read came from
+    the first or the second mate, the second dim. represent read lengths from 0 to
+    max_length and the third dim. represents the the concatenation of the sequenses
+    at the fragment ends, taken from the reference genome, endcoded as an index.
+    Then length of an end sequence is 2 times the flank parameter.
 
     :param bam_file: File path to the bam sample file
     :type bam_file: str
@@ -31,20 +30,18 @@ def length_end_seqs(
     """
     region_lst = load_bed_file(bed_file)
     bam = BAM(bam_file)
-    id_lst = list()
-    tensor = np.empty((len(region_lst),), dtype=np.object)
+    id_lst = ["start_is_first_mate", "start_is_second_mate"]
     N_seqs = 4 ** (4 * flank) + 1  # the last bin is for sequences containing N
+    T = np.array((2, max_length, N_seqs))
     try:
         tb = py2bit.open(ref_genome_file)
         for i, region in enumerate(region_lst):
-            matrix = dok_matrix((max_length, N_seqs), dtype=np.uint16)
             for read in bam.pair_generator(region.chrom, region.start, region.end):
                 length = abs(read.end - read.start)
                 if length < max_length:
                     seq = fetch_seq(tb, region.chrom, read.start, read.end, flank)
-                    matrix[length, seq_to_index(seq)] += 1
-            tensor[i] = csr_matrix(matrix)
-            id_lst.append(region.region_id)
-        Data.write(Data(tensor, id_lst), output_file)
+                    mate = 0 if read.start_is_first else 1
+                    T[mate, length, seq_to_index(seq)] += 1
+        Data.write(Data(T, id_lst), output_file)
     finally:
         tb.close()
