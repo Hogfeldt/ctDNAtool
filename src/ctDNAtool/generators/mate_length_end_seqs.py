@@ -7,7 +7,7 @@ from .utils import seq_to_index, fetch_seq
 from ..data import Data
 
 
-def length_end_seqs(
+def mate_length_end_seqs(
     bam_file, bed_file, ref_genome_file, output_file, max_length=500, flank=1
 ):
     """Create a tensor where the first dim. represents a whether a read came from
