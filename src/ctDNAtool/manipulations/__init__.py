@@ -2,6 +2,7 @@ from .binning import binning, stride_binning
 from .pick_subset import pick_subset
 from .sample_sum import sample_sum
 from .region_sum import region_sum
+from .summaries import summaries
 
 __all__ = [
     "binning",
@@ -9,4 +10,5 @@ __all__ = [
     "sample_sum",
     "stride_binning",
     "region_sum",
+    "summaries",
 ]
