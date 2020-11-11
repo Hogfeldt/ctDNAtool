@@ -15,3 +15,9 @@ def fetch_seq(tb, chrom, start, end, flank):
     start_seq = tb.sequence(chrom, start - flank, start + flank)
     end_seq = tb.sequence(chrom, end - flank, end + flank)
     return (start_seq + end_seq).upper()
+
+
+def fetch_seqs(tb, chrom, start, end, flank):
+    start_seq = tb.sequence(chrom, start - flank, start + flank).upper()
+    end_seq = tb.sequence(chrom, end - flank, end + flank).upper()
+    return (start_seq, end_seq)

@@ -3,7 +3,7 @@ import py2bit
 
 from .bed import load_bed_file
 from .bam import BAM
-from .utils import seq_to_index, fetch_seq
+from .utils import seq_to_index, fetch_seqs
 from ..data import Data
 
 
@@ -30,8 +30,8 @@ def mate_length_end_seqs(
     """
     region_lst = load_bed_file(bed_file)
     bam = BAM(bam_file)
-    id_lst = ["start_is_first_mate", "start_is_second_mate"]
-    N_seqs = 4 ** (4 * flank) + 1  # the last bin is for sequences containing N
+    id_lst = ["first_mate", "second_mate"]
+    N_seqs = 4 ** (2 * flank) + 1  # the last bin is for sequences containing N
     T = np.zeros((2, max_length, N_seqs), dtype=np.uint16)
     try:
         tb = py2bit.open(ref_genome_file)
@@ -39,9 +39,12 @@ def mate_length_end_seqs(
             for read in bam.pair_generator(region.chrom, region.start, region.end):
                 length = abs(read.end - read.start)
                 if length < max_length:
-                    seq = fetch_seq(tb, region.chrom, read.start, read.end, flank)
-                    mate = 0 if read.start_is_first else 1
-                    T[mate, length, seq_to_index(seq)] += 1
+                    start_seq, end_seq = fetch_seqs(
+                        tb, region.chrom, read.start, read.end, flank
+                    )
+                    start_mate, end_mate = (0, 1) if read.start_is_first else (1, 0)
+                    T[start_mate, length, seq_to_index(start_seq)] += 1
+                    T[end_mate, length, seq_to_index(end_seq)] += 1
         Data.write(Data(T, id_lst), output_file)
     finally:
         tb.close()
