@@ -24,7 +24,7 @@ def length_matrix(bam_file, bed_file, output_file, max_length=500, mapq=20):
     :returns:  None
     """
     region_lst = load_bed_file(bed_file)
-    matrix = np.zeros((len(region_lst), max_length), dtype=np.uint16)
+    matrix = np.zeros((len(region_lst), max_length), dtype=np.uint32)
     bam = BAM(bam_file)
     id_lst = list()
     for i, region in enumerate(region_lst):

@@ -37,7 +37,7 @@ def length_end_seqs(
     try:
         tb = py2bit.open(ref_genome_file)
         for i, region in enumerate(region_lst):
-            matrix = dok_matrix((max_length, N_seqs), dtype=np.uint16)
+            matrix = dok_matrix((max_length, N_seqs), dtype=np.uint32)
             for read in bam.pair_generator(
                 region.chrom, region.start, region.end, mapq
             ):

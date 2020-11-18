@@ -32,7 +32,7 @@ def mate_length_end_seqs(
     bam = BAM(bam_file)
     id_lst = ["first_mate", "second_mate"]
     N_seqs = 4 ** (2 * flank) + 1  # the last bin is for sequences containing N
-    T = np.zeros((2, max_length, N_seqs), dtype=np.uint16)
+    T = np.zeros((2, max_length, N_seqs), dtype=np.uint3216)
     try:
         tb = py2bit.open(ref_genome_file)
         for i, region in enumerate(region_lst):
