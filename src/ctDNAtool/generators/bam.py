@@ -66,7 +66,7 @@ class BAM:
                     end = mem_end
                     start_is_first = not mem_is_read1
 
-                if start < end:
+                if start > end:
                     continue
                 yield Read(read.reference_name, int(start), int(end), start_is_first)
 
