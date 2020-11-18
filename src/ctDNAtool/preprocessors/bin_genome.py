@@ -50,7 +50,7 @@ def bin_genome_Mbp(
         bed_writer = tsv_writer(fp)
         bed_writer.writerow(["#chrom", "start", "end", "name", "score", "strand"])
         for chr_name in natsorted(
-            filter(chroms.keys(), key=select_chrom_test(chromosomes))
+            filter(select_chrom_test(chromosomes), chroms.keys())
         ):
             length = int(chroms[chr_name])
             pos_pairs = zip(
