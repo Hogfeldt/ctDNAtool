@@ -28,13 +28,18 @@ class BAM:
 
         self.bam_file = pysam.AlignmentFile(filename, "rb")
 
-    def pair_generator(self, chrom, region_start, region_end):
+    def pair_generator(self, chrom, region_start, region_end, mapq=20):
         mem = {}
 
         for read in self.bam_file.fetch(
             contig=chrom, start=region_start, stop=region_end
         ):
-            if read.is_duplicate or read.is_secondary or read.is_supplementary:
+            if (
+                read.is_duplicate
+                or read.is_secondary
+                or read.is_supplementary
+                or read.mapping_quality < mapq
+            ):
                 continue
 
             query_name = read.query_name

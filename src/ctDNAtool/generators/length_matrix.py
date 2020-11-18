@@ -5,7 +5,7 @@ from .bed import load_bed_file
 from ..data import Data
 
 
-def length_matrix(bam_file, bed_file, output_file, max_length=500):
+def length_matrix(bam_file, bed_file, output_file, max_length=500, mapq=20):
     """Creates a matrix where each row represents a region from the bed file
     and the columns are read lengths from 0 to max_length.
     The size of the matrix is (n x max_length) where n is the number of regions
@@ -28,7 +28,7 @@ def length_matrix(bam_file, bed_file, output_file, max_length=500):
     bam = BAM(bam_file)
     id_lst = list()
     for i, region in enumerate(region_lst):
-        for read in bam.pair_generator(region.chrom, region.start, region.end):
+        for read in bam.pair_generator(region.chrom, region.start, region.end, mapq):
             length = abs(read.end - read.start)
             if length < max_length:
                 matrix[i, length] += 1

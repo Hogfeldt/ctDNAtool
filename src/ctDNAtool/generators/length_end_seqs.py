@@ -9,7 +9,7 @@ from ..data import Data
 
 
 def length_end_seqs(
-    bam_file, bed_file, ref_genome_file, output_file, max_length=500, flank=1
+    bam_file, bed_file, ref_genome_file, output_file, max_length=500, flank=1, mapq=20
 ):
     """Create a tensor where the first dim. represents a region from the bed file,
     the second dim. represent read lengths from 0 to max_length and the third dim.
@@ -38,7 +38,9 @@ def length_end_seqs(
         tb = py2bit.open(ref_genome_file)
         for i, region in enumerate(region_lst):
             matrix = dok_matrix((max_length, N_seqs), dtype=np.uint16)
-            for read in bam.pair_generator(region.chrom, region.start, region.end):
+            for read in bam.pair_generator(
+                region.chrom, region.start, region.end, mapq
+            ):
                 length = abs(read.end - read.start)
                 if length < max_length:
                     seq = fetch_seq(tb, region.chrom, read.start, read.end, flank)

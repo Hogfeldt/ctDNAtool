@@ -37,8 +37,9 @@ def bin_genome(genome_ref_file, output_file, mbp):
 @click.argument("bed_file")
 @click.option("-o", "--output-file", default="length_matrix.pickle")
 @click.option("-m", "--max-length", default=500, type=click.IntRange(min=1))
-def generate_length(bam_file, bed_file, output_file, max_length):
-    generators.length_matrix(bam_file, bed_file, output_file, max_length)
+@click.option("-q", "--map-quality", default=20, type=click.IntRange(min=0))
+def generate_length(bam_file, bed_file, output_file, max_length, map_quality):
+    generators.length_matrix(bam_file, bed_file, output_file, max_length, map_quality)
 
 
 @cli.command()
@@ -48,11 +49,18 @@ def generate_length(bam_file, bed_file, output_file, max_length):
 @click.option("-o", "--output-file", default="length_matrix.pickle")
 @click.option("-m", "--max-length", default=500, type=click.IntRange(min=1))
 @click.option("-f", "--flank", default=1, type=click.IntRange(min=1))
+@click.option("-q", "--map-quality", default=20, type=click.IntRange(min=0))
 def generate_length_end_seq(
-    bam_file, bed_file, reference_genome, output_file, max_length, flank
+    bam_file, bed_file, reference_genome, output_file, max_length, flank, map_quality
 ):
     generators.length_end_seqs(
-        bam_file, bed_file, reference_genome, output_file, max_length, flank
+        bam_file,
+        bed_file,
+        reference_genome,
+        output_file,
+        max_length,
+        flank,
+        map_quality,
     )
 
 
@@ -63,11 +71,18 @@ def generate_length_end_seq(
 @click.option("-o", "--output-file", default="length_matrix.pickle")
 @click.option("-m", "--max-length", default=500, type=click.IntRange(min=1))
 @click.option("-f", "--flank", default=1, type=click.IntRange(min=1))
+@click.option("-q", "--map-quality", default=20, type=click.IntRange(min=0))
 def generate_mate_length_end_seq(
-    bam_file, bed_file, reference_genome, output_file, max_length, flank
+    bam_file, bed_file, reference_genome, output_file, max_length, flank, map_quality
 ):
     generators.mate_length_end_seqs(
-        bam_file, bed_file, reference_genome, output_file, max_length, flank
+        bam_file,
+        bed_file,
+        reference_genome,
+        output_file,
+        max_length,
+        flank,
+        map_quality,
     )
 
 
