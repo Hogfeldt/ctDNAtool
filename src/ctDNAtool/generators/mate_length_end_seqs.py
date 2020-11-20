@@ -8,7 +8,7 @@ from ..data import Data
 
 
 def mate_length_end_seqs(
-    bam_file, bed_file, ref_genome_file, output_file, max_length=500, flank=1
+    bam_file, bed_file, ref_genome_file, output_file, max_length=500, flank=1, mapq=20
 ):
     """Create a tensor where the first dim. represents a whether a read came from
     the first or the second mate, the second dim. represent read lengths from 0 to
@@ -32,11 +32,13 @@ def mate_length_end_seqs(
     bam = BAM(bam_file)
     id_lst = ["first_mate", "second_mate"]
     N_seqs = 4 ** (2 * flank) + 1  # the last bin is for sequences containing N
-    T = np.zeros((2, max_length, N_seqs), dtype=np.uint16)
+    T = np.zeros((2, max_length, N_seqs), dtype=np.uint32)
     try:
         tb = py2bit.open(ref_genome_file)
         for i, region in enumerate(region_lst):
-            for read in bam.pair_generator(region.chrom, region.start, region.end):
+            for read in bam.pair_generator(
+                region.chrom, region.start, region.end, mapq
+            ):
                 length = abs(read.end - read.start)
                 if length < max_length:
                     start_seq, end_seq = fetch_seqs(
