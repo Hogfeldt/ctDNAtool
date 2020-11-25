@@ -3,7 +3,7 @@ import numpy as np
 from ..data import Data
 
 
-def summaries(sample_file, flank):
+def summaries_file(sample_file, flank):
     """This function will given a sample and flank find flank amount of base pairs on each end of the sample
     and return sample ID, count of each base pair and frequency of each base pair
 
@@ -14,6 +14,11 @@ def summaries(sample_file, flank):
     """
     sample_id = sample_file.split("/")[-1].replace(".pickle", "")
     data = Data.read(sample_file).data.sum(axis=0)
+    counts, freqs = summaries(data, flank)
+    return sample_id, counts, freqs
+
+
+def summaries(data, flank):
     nonzero = data.nonzero()
     seq_pairs = zip(np.array(data[nonzero])[0], nonzero[1])
     counts = np.zeros((4, 2 * flank))
@@ -29,4 +34,5 @@ def summaries(sample_file, flank):
             counts[nucl, i] += n
             kmer //= 4
     freqs = counts / counts.sum(axis=0)
-    return sample_id, counts, freqs
+
+    return counts, freqs
