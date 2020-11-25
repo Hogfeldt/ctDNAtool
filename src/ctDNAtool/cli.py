@@ -26,12 +26,11 @@ def find_tss(annotation_file, region_size, bed_file, tss_file):
 
 @cli.command()
 @click.argument("genome_ref_file")
-@click.option("-o", "--output_file", default="genome_bins.bed")
-@click.option("-m", "--mbp", default=1.0)
-@click.option("-a", "--autosome_X", default=False)
-def bin_genome(genome_ref_file, output_file, mbp, autosome_X):
-    assert mbp > 0, "mbp only accepts values larger than 0"
-    chromosomes = Chromosomes.AUTOSOMES_X if autosome_X else Chromosomes.AUTOSOMES
+@click.option("-o", "--output-file", default="genome_bins.bed")
+@click.option("-m", "--mbp", default=1.0, type=click.FloatRange(min=1e-06))
+@click.option("-a", "--include-X", is_flag=True)
+def bin_genome(genome_ref_file, output_file, mbp, include_X):
+    chromosomes = Chromosomes.AUTOSOMES_X if include_X else Chromosomes.AUTOSOMES
     preprocessors.bin_genome_Mbp(genome_ref_file, output_file, mbp, chromosomes)
 
 
