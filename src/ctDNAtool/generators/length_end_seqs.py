@@ -41,7 +41,7 @@ def length_end_seqs(
             for read in bam.pair_generator(
                 region.chrom, region.start, region.end, mapq
             ):
-                length = abs(read.end - read.start)
+                length = read.length
                 if length < max_length:
                     seq = fetch_seq(tb, region.chrom, read.start, read.end, flank)
                     matrix[length, seq_to_index(seq)] += 1

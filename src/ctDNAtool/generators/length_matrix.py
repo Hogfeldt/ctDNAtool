@@ -29,7 +29,7 @@ def length_matrix(bam_file, bed_file, output_file, max_length=500, mapq=20):
     id_lst = list()
     for i, region in enumerate(region_lst):
         for read in bam.pair_generator(region.chrom, region.start, region.end, mapq):
-            length = abs(read.end - read.start)
+            length = read.length
             if length < max_length:
                 matrix[i, length] += 1
         id_lst.append(region.region_id)
