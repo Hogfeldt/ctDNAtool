@@ -45,7 +45,7 @@ def length_end_seqs(
                 length = read.length
                 if (
                     length < max_length
-                    and chroms_lengths[region.chrom] > (read.end + flank)
+                    and chroms_lengths[region.chrom] >= (read.end + flank)
                     and 0 <= (read.start - flank)
                 ):
                     seq = fetch_seq(tb, region.chrom, read.start, read.end, flank)
