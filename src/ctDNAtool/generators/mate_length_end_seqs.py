@@ -41,9 +41,11 @@ def mate_length_end_seqs(
                 region.chrom, region.start, region.end, mapq
             ):
                 length = read.length
-                if (length < max_length
-                    or chroms_lengths[region.chrom] > (read.end + flank) 
-                    or 0 >= (read.start - flank)):
+                if (
+                    length < max_length
+                    or chroms_lengths[region.chrom] > (read.end + flank)
+                    or 0 >= (read.start - flank)
+                ):
                     start_seq, end_seq = fetch_seqs(
                         tb, region.chrom, read.start, read.end, flank
                     )

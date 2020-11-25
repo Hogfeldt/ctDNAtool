@@ -43,9 +43,11 @@ def length_end_seqs(
                 region.chrom, region.start, region.end, mapq
             ):
                 length = read.length
-                if (length < max_length
-                    or chroms_lengths[region.chrom] > (read.end + flank) 
-                    or 0 >= (read.start - flank)):
+                if (
+                    length < max_length
+                    or chroms_lengths[region.chrom] > (read.end + flank)
+                    or 0 >= (read.start - flank)
+                ):
                     seq = fetch_seq(tb, region.chrom, read.start, read.end, flank)
                     matrix[length, seq_to_index(seq)] += 1
             tensor[i] = csr_matrix(matrix)
