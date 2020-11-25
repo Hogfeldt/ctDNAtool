@@ -20,7 +20,7 @@ def select_chrom_test(chroms):
 
 
 def bin_genome_Mbp(
-    genome_ref_file, output_file, mbp=1.0, chromosomes=Chromosomes.AUTOSOMES_X
+    genome_ref_file, output_file, mbp=1.0, chromosomes=Chromosomes.AUTOSOMES
 ):
     """This function will given a genome reference file in .2bit format,
     create a bed file splitting the genome in bins of size mbp.

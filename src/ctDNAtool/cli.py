@@ -4,6 +4,7 @@ from . import generators
 from . import preprocessors
 from . import manipulations
 from .utils import tsv_reader
+from .preprocessors.bin_genome import Chromosomes
 
 
 @click.group()
@@ -26,10 +27,12 @@ def find_tss(annotation_file, region_size, bed_file, tss_file):
 @cli.command()
 @click.argument("genome_ref_file")
 @click.option("-o", "--output_file", default="genome_bins.bed")
-@click.option("-m", "--mbp", default=1.0)  # TODO: this should only take values > 0
-def bin_genome(genome_ref_file, output_file, mbp):
-    # TODO: add option for switching between AUTOSOME_X and AUTOSOME
-    preprocessors.bin_genome_Mbp(genome_ref_file, output_file, mbp)
+@click.option("-m", "--mbp", default=1.0)
+@click.option("-a", "--autosome_X", default=False)
+def bin_genome(genome_ref_file, output_file, mbp, autosome_X):
+    assert mbp > 0, "mbp only accepts values larger than 0"
+    chromosomes = Chromosomes.AUTOSOMES_X if autosome_X else Chromosomes.AUTOSOMES
+    preprocessors.bin_genome_Mbp(genome_ref_file, output_file, mbp, chromosomes)
 
 
 @cli.command()
