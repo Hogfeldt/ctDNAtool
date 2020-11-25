@@ -39,7 +39,7 @@ def mate_length_end_seqs(
             for read in bam.pair_generator(
                 region.chrom, region.start, region.end, mapq
             ):
-                length = abs(read.end - read.start)
+                length = read.length
                 if length < max_length:
                     start_seq, end_seq = fetch_seqs(
                         tb, region.chrom, read.start, read.end, flank

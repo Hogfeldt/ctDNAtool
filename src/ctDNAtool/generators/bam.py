@@ -8,11 +8,12 @@ import attr
 
 
 @attr.s
-class Read:
+class ReadPair:
     ref_name = attr.ib()
     start = attr.ib()
     end = attr.ib()
     start_is_first = attr.ib()
+    length = attr.ib()
 
 
 class BAM:
@@ -70,10 +71,13 @@ class BAM:
                     start = read.reference_start
                     end = mem_end
                     start_is_first = not mem_is_read1
+                length = abs(read.template_length)
 
-                if start > end:
+                if start >= end:
                     continue
-                yield Read(read.reference_name, int(start), int(end), start_is_first)
+                yield ReadPair(
+                    read.reference_name, int(start), int(end), start_is_first, length
+                )
 
     def pair_generator_gabriel(self, chrom, region_start, region_end):
         mem = {}
