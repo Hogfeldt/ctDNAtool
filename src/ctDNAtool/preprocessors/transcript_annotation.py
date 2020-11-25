@@ -1,5 +1,6 @@
 import attr
-import re
+
+from .utils import is_autosome
 
 
 @attr.s
@@ -9,10 +10,6 @@ class Tx_annotation:
     end = attr.ib()
     strand = attr.ib()
     additionals = attr.ib()
-
-
-def is_chrome_autosome(chrom):
-    return re.match(r"chr\d", chrom) is not None
 
 
 def pull_tx_id(anno_obj):
@@ -44,7 +41,7 @@ def load_transcript_annotations_iter(annotation_path):
                 anno_obj = Tx_annotation(
                     anno[0], int(anno[3]), int(anno[4]), anno[6], anno[8]
                 )
-                if is_chrome_autosome(anno_obj.chrom):  # Filter out none autosomes
+                if is_autosome(anno_obj.chrom):  # Filter out none autosomes
                     yield anno_obj
 
 
@@ -57,7 +54,7 @@ def load_transcript_annotations(annotation_path):
                 anno_obj = Tx_annotation(
                     anno[0], int(anno[3]), int(anno[4]), anno[6], anno[8]
                 )
-                if is_chrome_autosome(anno_obj.chrom):  # Filter out none autosomes
+                if is_autosome(anno_obj.chrom):  # Filter out none autosomes
                     tx_id = pull_tx_id(anno_obj)
                     annotations[tx_id] = anno_obj
     return annotations
