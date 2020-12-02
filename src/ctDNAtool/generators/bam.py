@@ -73,7 +73,7 @@ class BAM:
                     start_is_first = not mem_is_read1
                 length = abs(read.template_length)
 
-                if start >= end:
+                if start >= end or length == 0:
                     continue
                 yield ReadPair(
                     read.reference_name, int(start), int(end), start_is_first, length
