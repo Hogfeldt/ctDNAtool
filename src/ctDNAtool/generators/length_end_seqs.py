@@ -38,7 +38,7 @@ def length_end_seqs(
         tb = py2bit.open(ref_genome_file)
         chroms_lengths = tb.chroms()
         for i, region in enumerate(region_lst):
-            matrix = dok_matrix((max_length, N_seqs), dtype=np.uint32)
+            matrix = dok_matrix((max_length - 1, N_seqs), dtype=np.uint32)
             for read in bam.pair_generator(
                 region.chrom, region.start, region.end, mapq
             ):
@@ -49,7 +49,7 @@ def length_end_seqs(
                     and 0 <= (read.start - flank)
                 ):
                     seq = fetch_seq(tb, region.chrom, read.start, read.end, flank)
-                    matrix[length, seq_to_index(seq)] += 1
+                    matrix[length - 1, seq_to_index(seq)] += 1
             tensor[i] = csr_matrix(matrix)
             id_lst.append(region.region_id)
         Data.write(Data(tensor, id_lst), output_file)
