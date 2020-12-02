@@ -26,12 +26,21 @@ def find_tss(annotation_file, region_size, bed_file, tss_file):
 
 @cli.command()
 @click.argument("genome_ref_file")
-@click.option("-o", "--output-file", default="genome_bins.bed")
+@click.option("-o", "--output-file")
 @click.option("-m", "--mbp", default=1.0, type=click.FloatRange(min=1e-06))
-@click.option("-a", "--include-X", is_flag=True)
-def bin_genome(genome_ref_file, output_file, mbp, include_X):
-    chromosomes = Chromosomes.AUTOSOMES_X if include_X else Chromosomes.AUTOSOMES
+@click.option("-x", "--include-X", is_flag=True)
+def bin_genome(genome_ref_file, output_file, mbp, include_x):
+    chromosomes = Chromosomes.AUTOSOMES_X if include_x else Chromosomes.AUTOSOMES
     preprocessors.bin_genome_Mbp(genome_ref_file, output_file, mbp, chromosomes)
+
+
+@cli.command()
+@click.argument("genome-ref-file")
+@click.option("-o", "--output_file")
+@click.option("-x", "--include-X", is_flag=True)
+def bin_genome_chromosome(genome_ref_file, output_file, include_x):
+    chromosomes = Chromosomes.AUTOSOMES_X if include_x else Chromosomes.AUTOSOMES
+    preprocessors.bin_genome_chromosome(genome_ref_file, output_file, chromosomes)
 
 
 @cli.command()
