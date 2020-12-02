@@ -100,6 +100,7 @@ def bin_genome_Mbp(
                         strand="+",
                     )
                 )
+        write_bed_file(output_file, beds)
         return output_file
     finally:
         tb.close()
