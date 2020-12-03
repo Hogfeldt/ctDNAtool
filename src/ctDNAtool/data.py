@@ -14,9 +14,10 @@ def astype(dtype, sample):
 
 
 class Data:
-    def __init__(self, data, region_ids):
+    def __init__(self, data, region_ids, bam_report):
         self.data = data
         self.region_ids = region_ids
+        self.bam_report = bam_report
         self.is_sparse, self.dtype = self.__determine_structure_and_dtype(data)
 
     @staticmethod
