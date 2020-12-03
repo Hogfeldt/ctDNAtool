@@ -52,6 +52,7 @@ def length_end_seqs(
                     matrix[length - 1, seq_to_index(seq)] += 1
             tensor[i] = csr_matrix(matrix)
             id_lst.append(region.region_id)
+        print(bam)
         Data.write(Data(tensor, id_lst), output_file)
     finally:
         tb.close()

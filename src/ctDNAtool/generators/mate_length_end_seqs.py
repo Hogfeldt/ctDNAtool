@@ -52,6 +52,7 @@ def mate_length_end_seqs(
                     start_mate, end_mate = (0, 1) if read.start_is_first else (1, 0)
                     T[start_mate, length - 1, seq_to_index(start_seq)] += 1
                     T[end_mate, length - 1, seq_to_index(end_seq)] += 1
+        print(bam)
         Data.write(Data(T, id_lst), output_file)
     finally:
         tb.close()
