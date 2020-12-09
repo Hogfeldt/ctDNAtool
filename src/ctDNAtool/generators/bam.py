@@ -3,7 +3,6 @@
 #  NucCa (https://github.com/TobiasRoikjer/NucCa)
 import pysam
 import os
-import sys
 import attr
 import logging
 
