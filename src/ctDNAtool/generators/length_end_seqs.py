@@ -1,11 +1,14 @@
 import numpy as np
 from scipy.sparse import dok_matrix, csr_matrix
 import py2bit
+import logging
 
 from .bed import load_bed_file
 from .bam import BAM
 from .utils import seq_to_index, fetch_seq
 from ..data import Data
+
+logger = logging.getLogger()
 
 
 def length_end_seqs(
@@ -52,6 +55,7 @@ def length_end_seqs(
                     matrix[length - 1, seq_to_index(seq)] += 1
             tensor[i] = csr_matrix(matrix)
             id_lst.append(region.region_id)
-        Data.write(Data(tensor, id_lst), output_file)
+        logger.info(str(bam))
+        Data.write(Data(tensor, id_lst, bam.report), output_file)
     finally:
         tb.close()

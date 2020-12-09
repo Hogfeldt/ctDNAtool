@@ -3,8 +3,10 @@
 #  NucCa (https://github.com/TobiasRoikjer/NucCa)
 import pysam
 import os
-import sys
 import attr
+import logging
+
+logger = logging.getLogger()
 
 
 @attr.s
@@ -16,18 +18,50 @@ class ReadPair:
     length = attr.ib()
 
 
+@attr.s
+class Report:
+    file_name = attr.ib()
+    fetched_reads = attr.ib(default=0)
+    reads_passed_qual_check = attr.ib(default=0)
+    paired_reads = attr.ib(default=0)
+    paired_reads_passed_qual_check = attr.ib(default=0)
+    paired_reads_yielded = attr.ib(default=0)
+
+    def __str__(self):
+        return "\n".join(
+            [
+                "{0: ^47}",
+                "-" * 47,
+                "Reads fetched:{1: >33}",
+                "Reads passed quality check:{2: >20}",
+                "Reads paired:{3: >34}",
+                "Paired reads passed quality check:{4: >13}",
+                "Paired reads emmitted:{5: >25}",
+                "",
+                "bam file: {6}",
+            ]
+        ).format(
+            "BAM Report:",
+            self.fetched_reads,
+            self.reads_passed_qual_check,
+            self.paired_reads,
+            self.paired_reads_passed_qual_check,
+            self.paired_reads_yielded,
+            self.file_name,
+        )
+
+
 class BAM:
     def __init__(self, filename):
         bai_filename = f"{filename}.bai"
 
         # Check if index exists, if not create an index file
         if not os.path.exists(bai_filename):
-            print(
-                f"No index file found ({bai_filename}), generating...", file=sys.stderr
-            )
+            logger.warning(f"No index file found ({bai_filename}), generating...")
             pysam.index(filename)
 
         self.bam_file = pysam.AlignmentFile(filename, "rb")
+        self.report = Report(filename)
 
     def pair_generator(self, chrom, region_start, region_end, mapq=20):
         mem = {}
@@ -35,6 +69,7 @@ class BAM:
         for read in self.bam_file.fetch(
             contig=chrom, start=region_start, stop=region_end
         ):
+            self.report.fetched_reads += 1
             if (
                 read.is_duplicate
                 or read.is_secondary
@@ -44,6 +79,7 @@ class BAM:
                 continue
 
             query_name = read.query_name
+            self.report.reads_passed_qual_check += 1
 
             if query_name not in mem:
                 mem[query_name] = (
@@ -55,6 +91,7 @@ class BAM:
             else:
                 mem_start, mem_end, mem_reverse, mem_is_read1 = mem[query_name]
                 del mem[query_name]
+                self.report.paired_reads += 2
                 if (
                     mem_start is None
                     or mem_end is None
@@ -63,6 +100,7 @@ class BAM:
                     or read.is_reverse == mem_reverse
                 ):
                     continue
+                self.report.paired_reads_passed_qual_check += 2
                 if read.is_reverse:
                     start = mem_start
                     end = read.reference_end
@@ -75,9 +113,13 @@ class BAM:
 
                 if start >= end or length == 0:
                     continue
+                self.report.paired_reads_yielded += 2
                 yield ReadPair(
                     read.reference_name, int(start), int(end), start_is_first, length
                 )
+
+    def __str__(self):
+        return str(self.report)
 
     def pair_generator_gabriel(self, chrom, region_start, region_end):
         mem = {}

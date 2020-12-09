@@ -14,7 +14,6 @@ def region_sum(sample_file, output_file):
     :type output_file: str
     """
     sample = Data.read(sample_file)
-    result = None
     if sample.is_sparse:
         result = sample.data[0]
         for matrix in sample.data[1:]:
@@ -22,4 +21,4 @@ def region_sum(sample_file, output_file):
                 result += matrix
     else:
         result = np.sum(sample.data, axis=0)
-    Data.write(Data(result, ["region_sum"]), output_file)
+    Data.write(Data(result, ["region_sum"], sample.bam_report), output_file)
