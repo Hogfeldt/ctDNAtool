@@ -1,10 +1,14 @@
 import click
+import logging
 
 from . import generators
 from . import preprocessors
 from . import manipulations
 from .utils import tsv_reader
 from .preprocessors.bin_genome import Chromosomes
+
+
+logging.basicConfig(level=logging.DEBUG)
 
 
 @click.group()

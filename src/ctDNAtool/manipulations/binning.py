@@ -1,7 +1,10 @@
 import math
 import numpy as np
+import logging
 
 from ..data import Data
+
+logger = logging.getLogger()
 
 
 def calc_number_of_strides(n, bin_size, stride):
@@ -15,8 +18,7 @@ def stride_binning(X, bin_size, stride):
     n, m = X.shape
     n_bins = calc_number_of_strides(n, bin_size, stride)
     if (n - bin_size) % stride != 0:
-        # TODO: The logging module will probably be prefered
-        print("WARNING: last bin is smaller than the given bin size")
+        logger.warning("WARNING: last bin is smaller than the given bin size")
     R = np.zeros((n_bins, m))
     for i in range(n_bins):
         start = i * stride
