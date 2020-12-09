@@ -4,10 +4,10 @@
 #
 #    pip-compile --output-file=requirements.txt
 #
-attrs==20.2.0             # via ctDNAtool (setup.py)
+attrs==20.3.0             # via ctDNAtool (setup.py)
 click==7.1.2              # via ctDNAtool (setup.py)
-natsort==7.0.1            # via ctDNAtool (setup.py)
-numpy==1.19.2             # via ctDNAtool (setup.py), scipy
+natsort==7.1.0            # via ctDNAtool (setup.py)
+numpy==1.19.4             # via ctDNAtool (setup.py), scipy
 py2bit==0.3.0             # via ctDNAtool (setup.py)
 pysam==0.16.0.1           # via ctDNAtool (setup.py)
-scipy==1.5.2              # via ctDNAtool (setup.py)
+scipy==1.5.4              # via ctDNAtool (setup.py)

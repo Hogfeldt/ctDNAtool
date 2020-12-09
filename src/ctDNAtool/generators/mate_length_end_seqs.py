@@ -32,7 +32,7 @@ def mate_length_end_seqs(
     bam = BAM(bam_file)
     id_lst = ["first_mate", "second_mate"]
     N_seqs = 4 ** (2 * flank) + 1  # the last bin is for sequences containing N
-    T = np.zeros((2, max_length, N_seqs), dtype=np.uint32)
+    T = np.zeros((2, max_length - 1, N_seqs), dtype=np.uint32)
     try:
         tb = py2bit.open(ref_genome_file)
         chroms_lengths = tb.chroms()
@@ -50,8 +50,8 @@ def mate_length_end_seqs(
                         tb, region.chrom, read.start, read.end, flank
                     )
                     start_mate, end_mate = (0, 1) if read.start_is_first else (1, 0)
-                    T[start_mate, length, seq_to_index(start_seq)] += 1
-                    T[end_mate, length, seq_to_index(end_seq)] += 1
+                    T[start_mate, length - 1, seq_to_index(start_seq)] += 1
+                    T[end_mate, length - 1, seq_to_index(end_seq)] += 1
         Data.write(Data(T, id_lst), output_file)
     finally:
         tb.close()
