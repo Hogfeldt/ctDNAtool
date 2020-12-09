@@ -1,6 +1,6 @@
 # ctDNAtool
 
-![Tests](https://github.com/Hogfeldt/ctDNAtool/workflows/Tests/badge.svg)
+![Run tests](https://github.com/Hogfeldt/ctDNAtool/workflows/Run%20tests/badge.svg)
 
 ## setup
 To install dependencies and install ctDNAtool, it's recommended to first create a new clean Conda environment, and then run:
