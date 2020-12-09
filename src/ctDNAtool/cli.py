@@ -5,6 +5,7 @@ from . import preprocessors
 from . import manipulations
 from .utils import tsv_reader
 from .preprocessors.bin_genome import Chromosomes
+from . import cli_common
 
 
 @click.group()
@@ -27,8 +28,8 @@ def find_tss(annotation_file, region_size, bed_file, tss_file):
 @cli.command()
 @click.argument("genome_ref_file")
 @click.option("-o", "--output-file")
-@click.option("-m", "--mbp", default=1.0, type=click.FloatRange(min=1e-06))
-@click.option("-x", "--include-X", is_flag=True)
+@cli_common.mbp
+@cli_common.include_x
 def bin_genome(genome_ref_file, output_file, mbp, include_x):
     chromosomes = Chromosomes.AUTOSOMES_X if include_x else Chromosomes.AUTOSOMES
     preprocessors.bin_genome_Mbp(genome_ref_file, output_file, mbp, chromosomes)
@@ -37,7 +38,7 @@ def bin_genome(genome_ref_file, output_file, mbp, include_x):
 @cli.command()
 @click.argument("genome-ref-file")
 @click.option("-o", "--output_file")
-@click.option("-x", "--include-X", is_flag=True)
+@cli_common.include_x
 def bin_genome_chromosome(genome_ref_file, output_file, include_x):
     chromosomes = Chromosomes.AUTOSOMES_X if include_x else Chromosomes.AUTOSOMES
     preprocessors.bin_genome_chromosome(genome_ref_file, output_file, chromosomes)
@@ -47,8 +48,8 @@ def bin_genome_chromosome(genome_ref_file, output_file, include_x):
 @click.argument("bam_file")
 @click.argument("bed_file")
 @click.option("-o", "--output-file", default="length_matrix.pickle")
-@click.option("-m", "--max-length", default=500, type=click.IntRange(min=1))
-@click.option("-q", "--map-quality", default=20, type=click.IntRange(min=0))
+@cli_common.max_length
+@cli_common.map_quality
 def generate_length(bam_file, bed_file, output_file, max_length, map_quality):
     generators.length_matrix(bam_file, bed_file, output_file, max_length, map_quality)
 
@@ -58,9 +59,9 @@ def generate_length(bam_file, bed_file, output_file, max_length, map_quality):
 @click.argument("bed_file")
 @click.argument("reference_genome")
 @click.option("-o", "--output-file", default="length_matrix.pickle")
-@click.option("-m", "--max-length", default=500, type=click.IntRange(min=1))
-@click.option("-f", "--flank", default=1, type=click.IntRange(min=1))
-@click.option("-q", "--map-quality", default=20, type=click.IntRange(min=0))
+@cli_common.max_length
+@cli_common.flank
+@cli_common.map_quality
 def generate_length_end_seq(
     bam_file, bed_file, reference_genome, output_file, max_length, flank, map_quality
 ):
@@ -80,9 +81,9 @@ def generate_length_end_seq(
 @click.argument("bed_file")
 @click.argument("reference_genome")
 @click.option("-o", "--output-file", default="length_matrix.pickle")
-@click.option("-m", "--max-length", default=500, type=click.IntRange(min=1))
-@click.option("-f", "--flank", default=1, type=click.IntRange(min=1))
-@click.option("-q", "--map-quality", default=20, type=click.IntRange(min=0))
+@cli_common.max_length
+@cli_common.flank
+@cli_common.map_quality
 def generate_mate_length_end_seq(
     bam_file, bed_file, reference_genome, output_file, max_length, flank, map_quality
 ):
@@ -130,7 +131,9 @@ def pick_subset(input_sample, ids_file, output_file):
 @cli.command()
 @click.argument("input_matrix")
 @click.option("-o", "--output-file", default="binned_matrix.pickle")
-@click.option("-b", "--bin-size", default=1, type=click.IntRange(min=1))
-@click.option("-s", "--stride", default=1, type=click.IntRange(min=1))
+@click.option(
+    "-b", "--bin-size", default=1, type=click.IntRange(min=1)
+)  # TODO: Could this be @mbp as well?
+@cli_common.stride
 def binning(input_matrix, output_file, bin_size, stride):
     manipulations.binning(input_matrix, output_file, bin_size, stride)
