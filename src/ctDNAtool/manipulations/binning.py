@@ -47,4 +47,4 @@ def binning(sample_file, output_file, bin_size, stride):
     sample = Data.read(sample_file)
     R = stride_binning(sample.data, bin_size, stride)
     new_region_ids = binning_update_ids(sample.region_ids, stride, R.shape[0])
-    Data.write(Data(R, new_region_ids), output_file)
+    Data.write(Data(R, new_region_ids, sample.bam_report), output_file)
