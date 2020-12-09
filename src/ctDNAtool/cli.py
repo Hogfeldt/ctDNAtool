@@ -131,7 +131,9 @@ def pick_subset(input_sample, ids_file, output_file):
 @cli.command()
 @click.argument("input_matrix")
 @click.option("-o", "--output-file", default="binned_matrix.pickle")
-@click.option("-b", "--bin-size", default=1, type=click.IntRange(min=1))  # TODO: Could this be @mbp as well?
+@click.option(
+    "-b", "--bin-size", default=1, type=click.IntRange(min=1)
+)  # TODO: Could this be @mbp as well?
 @cli_common.stride
 def binning(input_matrix, output_file, bin_size, stride):
     manipulations.binning(input_matrix, output_file, bin_size, stride)

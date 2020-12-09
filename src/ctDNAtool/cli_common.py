@@ -54,7 +54,7 @@ def flank(function):
         "--flank",
         default=1,
         type=click.IntRange(min=1),
-        help="Amount of base pairs on each end",  # TODO: description
+        help="Number of base pairs to include measured from fragment end",
     )
 
     return function
@@ -66,8 +66,7 @@ def stride(function):
         "--stride",
         default=1,
         type=click.IntRange(min=1),
-        help="stride"  # TODO: description
+        help="Number of base pairs to slide, when binnig with a sliding window",
     )
 
     return function
-

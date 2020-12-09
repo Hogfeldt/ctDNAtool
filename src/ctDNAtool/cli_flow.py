@@ -50,7 +50,7 @@ def length_data(
           ctDNAflow length-data <reference_genome_path> <BAM_file_path>
     """
     temp_bed_file = tempfile.NamedTemporaryFile()
-    temp_bed_file_summed = tempfile.NamedTemporaryFile()
+    temp_pickle_file = tempfile.NamedTemporaryFile()
 
     ctx.invoke(
         bin_genome_chromosome,
@@ -59,21 +59,19 @@ def length_data(
         include_x=include_x,
     )
 
-    print(temp_bed_file.name)
-
-    ctx.invoke(
-        region_sum,
-        sample_file=temp_bed_file.name,
-        output_file=temp_bed_file_summed.name,
-    )
-
     ctx.invoke(
         generate_length,
         bam_file=bam_file,
-        bed_file=temp_bed_file_summed.name,
-        output_file=output_file,
+        bed_file=temp_bed_file.name,
+        output_file=temp_pickle_file.name,
         max_length=max_length,
         map_quality=map_quality,
+    )
+
+    ctx.invoke(
+        region_sum,
+        sample_file=temp_pickle.name,
+        output_file=output_file,
     )
 
 
@@ -192,7 +190,7 @@ def length_seq_data(
           ctDNAflow length-seq-data <reference_genome_path> <BAM_file_path>
     """
     temp_bed_file = tempfile.NamedTemporaryFile()
-    temp_bed_file_summed = tempfile.NamedTemporaryFile()
+    temp_pickle_file = tempfile.NamedTemporaryFile()
 
     ctx.invoke(
         bin_genome_chromosome,
@@ -202,19 +200,19 @@ def length_seq_data(
     )
 
     ctx.invoke(
-        region_sum,
-        sample_file=temp_bed_file.name,
-        output_file=temp_bed_file_summed.name,
-    )
-
-    ctx.invoke(
         generate_length_end_seq,
         bam_file=bam_file,
-        bed_file=temp_bed_file_summed.name,
-        output_file=output_file,
+        bed_file=temp_bed_file.name,
+        output_file=temp_pickle_file.name,
         max_length=max_length,
         flank=flank,
         map_quality=map_quality,
+    )
+
+    ctx.invoke(
+        region_sum,
+        sample_file=temp_pickle_file.name,
+        output_file=output_file,
     )
 
 
