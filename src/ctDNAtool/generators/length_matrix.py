@@ -1,8 +1,12 @@
 import numpy as np
+import math
+import logging
 
 from .bam import BAM
 from .bed import load_bed_file
 from ..data import Data
+
+logger = logging.getLogger()
 
 
 def length_matrix(bam_file, bed_file, output_file, max_length=500, mapq=20):
@@ -31,9 +35,21 @@ def length_matrix(bam_file, bed_file, output_file, max_length=500, mapq=20):
     bam = BAM(bam_file)
     id_lst = list()
     for i, region in enumerate(region_lst):
+        log_progress(i, region_lst)
         for read in bam.pair_generator(region.chrom, region.start, region.end, mapq):
             length = read.length
             if length < max_length:
                 matrix[i, length - 1] += 1
         id_lst.append(region.region_id)
-    Data.write(Data(matrix, id_lst), output_file)
+    logger.info(str(bam))
+    Data.write(Data(matrix, id_lst, bam.report), output_file)
+
+
+def log_progress(i, region_lst):
+    percentage_steps = 10
+    if i % (int(len(region_lst) / percentage_steps)) == 0:
+        percentage = (i / len(region_lst)) * 100
+        percentage_rounded = int(
+            math.ceil(percentage / percentage_steps) * percentage_steps
+        )
+        logger.info("Creating matrix {}%".format(percentage_rounded))

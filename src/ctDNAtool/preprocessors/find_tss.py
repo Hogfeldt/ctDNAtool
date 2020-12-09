@@ -98,4 +98,4 @@ def find_tss(input_file, region_size, bed_file, tss_file):
                     [tss.chrom, region_start, region_end, tss_id, 0, tss.strand]
                 )
                 fp_tss.write("%s\n" % str(TSS_dict[tss_id]))
-    return (bed_file, tss_file)
+    return bed_file, tss_file

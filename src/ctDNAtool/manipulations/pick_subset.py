@@ -33,4 +33,4 @@ def pick_subset(sample_file, output_file, ids):
         index_map, ids
     )
     sub_sample = pick_subset_by_row_index(sample, new_old_index_pairs, len(ids))
-    Data.write(Data(sub_sample, new_index_id_pairs), output_file)
+    Data.write(Data(sub_sample, new_index_id_pairs, None), output_file)
