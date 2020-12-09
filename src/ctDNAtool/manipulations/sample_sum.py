@@ -10,7 +10,7 @@ logger = logging.getLogger()
 def add_if_eq_region(x, y):
     if x.region_ids != y.region_ids:
         # TODO: There should be some exception handling
-        logger.warning("WARNING! region ids does not match!")
+        logger.warning("region ids does not match!")
     else:
         x.data += y.data
         return x

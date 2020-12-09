@@ -1,10 +1,13 @@
 import numpy as np
 import py2bit
+import logging
 
 from .bed import load_bed_file
 from .bam import BAM
 from .utils import seq_to_index, fetch_seqs
 from ..data import Data
+
+logger = logging.getLogger()
 
 
 def mate_length_end_seqs(
@@ -52,7 +55,7 @@ def mate_length_end_seqs(
                     start_mate, end_mate = (0, 1) if read.start_is_first else (1, 0)
                     T[start_mate, length - 1, seq_to_index(start_seq)] += 1
                     T[end_mate, length - 1, seq_to_index(end_seq)] += 1
-        print(bam)
+        logger.info(str(bam))
         Data.write(Data(T, id_lst, bam.report), output_file)
     finally:
         tb.close()

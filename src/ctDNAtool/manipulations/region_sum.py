@@ -1,9 +1,6 @@
 import numpy as np
-import logging
 
 from ..data import Data
-
-logger = logging.getLogger()
 
 
 def region_sum(sample_file, output_file):
@@ -18,12 +15,10 @@ def region_sum(sample_file, output_file):
     """
     sample = Data.read(sample_file)
     if sample.is_sparse:
-        logger.info("sample is sparse")
         result = sample.data[0]
         for matrix in sample.data[1:]:
             if matrix.count_nonzero() != 0:
                 result += matrix
     else:
-        logger.info("sample is dense")
         result = np.sum(sample.data, axis=0)
     Data.write(Data(result, ["region_sum"], sample.bam_report), output_file)

@@ -41,7 +41,7 @@ def length_matrix(bam_file, bed_file, output_file, max_length=500, mapq=20):
             if length < max_length:
                 matrix[i, length - 1] += 1
         id_lst.append(region.region_id)
-    logger.info(bam)
+    logger.info(str(bam))
     Data.write(Data(matrix, id_lst, bam.report), output_file)
 
 
