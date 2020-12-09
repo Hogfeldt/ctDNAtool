@@ -70,7 +70,7 @@ def bin_genome_Mbp(
     :param genome_ref_file: File path to a .2bit file
     :type genome_ref_file: str
     :param output_file: The path to where the outputting bed file
-                        is stored.
+                        is stored. If none, the output is written to stdout
     :type output_file: str
     :param mbp: Bin size in Mbp.
     :type mbp:

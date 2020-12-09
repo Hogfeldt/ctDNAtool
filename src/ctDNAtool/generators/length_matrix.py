@@ -16,6 +16,7 @@ def length_matrix(bam_file, bed_file, output_file, max_length=500, mapq=20):
     in the bed file.
     Data is read length counts, so that a_ij is the number of reads in region i,
     with length j.
+    Only reads that meet the minimum map quality is generated.
 
     :param bam_file: File path to the bam sample file
     :type bam_file: str
@@ -25,6 +26,8 @@ def length_matrix(bam_file, bed_file, output_file, max_length=500, mapq=20):
     :type output_file: str
     :param max_length: Maximum read length to be counted
     :type max_length: int > 0
+    :param mapq: minimum map quality
+    :type mapq: int
     :returns:  None
     """
     region_lst = load_bed_file(bed_file)
