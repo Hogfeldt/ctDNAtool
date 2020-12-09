@@ -91,7 +91,7 @@ class BAM:
             else:
                 mem_start, mem_end, mem_reverse, mem_is_read1 = mem[query_name]
                 del mem[query_name]
-                self.report.paired_reads += 1
+                self.report.paired_reads += 2
                 if (
                     mem_start is None
                     or mem_end is None
@@ -100,7 +100,7 @@ class BAM:
                     or read.is_reverse == mem_reverse
                 ):
                     continue
-                self.report.paired_reads_passed_qual_check += 1
+                self.report.paired_reads_passed_qual_check += 2
                 if read.is_reverse:
                     start = mem_start
                     end = read.reference_end
@@ -113,7 +113,7 @@ class BAM:
 
                 if start >= end or length == 0:
                     continue
-                self.report.paired_reads_yielded += 1
+                self.report.paired_reads_yielded += 2
                 yield ReadPair(
                     read.reference_name, int(start), int(end), start_is_first, length
                 )
