@@ -1,5 +1,4 @@
 import click
-import logging
 
 from . import generators
 from . import preprocessors
@@ -9,15 +8,11 @@ from .preprocessors.bin_genome import Chromosomes
 from . import cli_common
 
 
-logging.basicConfig(level=logging.DEBUG)
-
-
 @click.group()
-def cli():
-    # Add debug info like:
-    # click.echo('No matrices was given to collapse')
-    # click.echo('Only one matrix was given to collapse')
-    pass
+@cli_common.quiet
+@cli_common.debug
+def cli(quiet, debug):
+    cli_common.setup_debugger(quiet, debug)
 
 
 @cli.command()

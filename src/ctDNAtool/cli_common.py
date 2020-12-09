@@ -1,4 +1,5 @@
 import click
+import logging
 
 
 def include_x(function):
@@ -55,7 +56,7 @@ def flank(function):
         default=1,
         type=click.IntRange(min=1),
         help="Number of base pairs to include measured from fragment end",
-    )
+    )(function)
 
     return function
 
@@ -66,7 +67,32 @@ def stride(function):
         "--stride",
         default=1,
         type=click.IntRange(min=1),
-        help="Number of base pairs to slide, when binnig with a sliding window",
-    )
+        help="Number of base pairs to slide, when binning with a sliding window",
+    )(function)
 
     return function
+
+
+def quiet(function):
+    function = click.option(
+        "-q", "--quiet", is_flag=True, help="Suppress logging output"
+    )(function)
+
+    return function
+
+
+def debug(function):
+    function = click.option(
+        "-d", "--debug", is_flag=True, help="Prints debugging info"
+    )(function)
+
+    return function
+
+
+def setup_debugger(quiet_flag, debug_flag):
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger()
+    if quiet_flag:
+        logger.setLevel(logging.CRITICAL)
+    if debug_flag:
+        logger.setLevel(logging.DEBUG)

@@ -12,7 +12,9 @@ from . import cli_common
 
 
 @click.group()
-def cli_flow():
+@cli_common.quiet
+@cli_common.debug
+def cli_flow(quiet, debug):
     """ctDNAflow is a tool for running workflows based on the atomic commands found in ctDNAtool.
 
     The workflows are compositions of multiple commands from ctDNAtool, and are design for ease of use.
@@ -23,7 +25,7 @@ def cli_flow():
 
         ctDNAflow length-data-chr-bin <reference_genome_path> <BAM_file_path>
     """
-    pass
+    cli_common.setup_debugger(quiet, debug)
 
 
 @cli_flow.command()
@@ -68,11 +70,7 @@ def length_data(
         map_quality=map_quality,
     )
 
-    ctx.invoke(
-        region_sum,
-        sample_file=temp_pickle_file.name,
-        output_file=output_file,
-    )
+    ctx.invoke(region_sum, sample_file=temp_pickle_file.name, output_file=output_file)
 
 
 @cli_flow.command()
@@ -209,11 +207,7 @@ def length_seq_data(
         map_quality=map_quality,
     )
 
-    ctx.invoke(
-        region_sum,
-        sample_file=temp_pickle_file.name,
-        output_file=output_file,
-    )
+    ctx.invoke(region_sum, sample_file=temp_pickle_file.name, output_file=output_file)
 
 
 @cli_flow.command()

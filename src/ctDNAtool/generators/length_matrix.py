@@ -49,5 +49,7 @@ def log_progress(i, region_lst):
     percentage_steps = 10
     if i % (int(len(region_lst) / percentage_steps)) == 0:
         percentage = (i / len(region_lst)) * 100
-        percentage_rounded = int(math.ceil(percentage / percentage_steps) * percentage_steps)
+        percentage_rounded = int(
+            math.ceil(percentage / percentage_steps) * percentage_steps
+        )
         logger.info("Creating matrix {}%".format(percentage_rounded))
