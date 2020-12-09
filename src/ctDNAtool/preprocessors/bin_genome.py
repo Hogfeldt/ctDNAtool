@@ -23,16 +23,16 @@ def bin_genome_chromosome(
     genome_ref_file, output_file, chromosomes=Chromosomes.AUTOSOMES
 ):
     """This function will given a genome reference file in .2bit format,
-        create a bed file splitting the genome in bins of chromosomes.
+    create a bed file splitting the genome in bins of chromosomes.
 
-        :param genome_ref_file: File path to a .2bit file
-        :type genome_ref_file: str
-        :param output_file: The path to where the outputting bed file
-                            is stored.
-        :type output_file: str
-        :param chromosomes: Choose wich chromosomes to include in bed file.
-        :type Chromosomes:
-        """
+    :param genome_ref_file: File path to a .2bit file
+    :type genome_ref_file: str
+    :param output_file: The path to where the outputting bed file
+                        is stored.
+    :type output_file: str
+    :param chromosomes: Choose wich chromosomes to include in bed file.
+    :type Chromosomes:
+    """
     tb = py2bit.open(genome_ref_file)
     try:
         chroms = tb.chroms()

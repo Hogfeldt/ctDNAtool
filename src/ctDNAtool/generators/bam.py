@@ -29,14 +29,14 @@ class Report:
         return "\n".join(
             [
                 "{0: ^47}",
-                "-"*47,
+                "-" * 47,
                 "Reads fetched:{1: >33}",
                 "Reads passed quality check:{2: >20}",
                 "Reads paired:{3: >34}",
                 "Paired reads passed quality check:{4: >13}",
                 "Paired reads emmitted:{5: >25}",
                 "",
-                "bam file: {6}"
+                "bam file: {6}",
             ]
         ).format(
             "BAM Report:",
