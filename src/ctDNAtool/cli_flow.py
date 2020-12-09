@@ -70,7 +70,7 @@ def length_data(
 
     ctx.invoke(
         region_sum,
-        sample_file=temp_pickle.name,
+        sample_file=temp_pickle_file.name,
         output_file=output_file,
     )
 
