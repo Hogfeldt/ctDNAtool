@@ -5,7 +5,7 @@
 ## setup
 To install dependencies and install ctDNAtool it's recommended to first create a new clean Conda environment, an then run:
 ```
-make init
+$ make init
 ```
 This will install the dependencies as well as ctDNAtool. ctDNAtool will be installed in edit mode.
 
@@ -18,5 +18,5 @@ $ ctDNAflow --help
 ## Run tests
 To let nox run the test suite, check for formatting and linting erros run:
 ```
-make test
+$ make test
 ```
