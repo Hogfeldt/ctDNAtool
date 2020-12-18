@@ -1,6 +1,7 @@
 # ctDNAtool
 
 ![Run tests](https://github.com/Hogfeldt/ctDNAtool/workflows/Run%20tests/badge.svg)
+<a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
 
 ## setup
 To install dependencies and install ctDNAtool, it's recommended to first create a new clean Conda environment, and then run:
