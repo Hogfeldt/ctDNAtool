@@ -34,6 +34,8 @@ def load_bed_file(file_path):
             region_lst.append(
                 BED(line[0], int(line[1]), int(line[2]), line[3], int(line[4]), line[5])
             )
+    assert len(region_lst) > 0, "BED file is empty"
+
     return region_lst
 
 

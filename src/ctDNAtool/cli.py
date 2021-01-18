@@ -114,6 +114,17 @@ def region_sum(sample_file, output_file):
 
 
 @cli.command()
+@click.argument("input_file")
+@click.option("-o", "--output-file", default="output.csv")
+@click.option("-l", "--length-lower-bound", default=1, type=click.INT)
+@click.option("-u", "--length-upper-bound", default=500, type=click.INT)
+def convert_to_tsv(input_file, output_file, length_lower_bound, length_upper_bound):
+    manipulations.convert_to_tsv(
+        input_file, output_file, length_lower_bound, length_upper_bound
+    )
+
+
+@cli.command()
 @click.argument("input_sample")
 @click.argument("ids_file")
 @click.option("-o", "--output-file", default="subset_sample.pickle")
