@@ -11,7 +11,7 @@ logger = logging.getLogger()
 
 
 def mate_length_end_seqs(
-    bam_file, bed_file, ref_genome_file, output_file, max_length=499, flank=1, mapq=20
+    bam_file, bed_file, ref_genome_file, output_file, max_length=500, flank=1, mapq=20
 ):
     """Create a tensor where the first dim. represents a whether a read came from
     the first or the second mate, the second dim. represent read lengths from 0 to

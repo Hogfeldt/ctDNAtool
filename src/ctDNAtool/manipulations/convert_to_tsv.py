@@ -3,7 +3,7 @@ from ..utils import tsv_writer
 
 
 def convert_to_tsv_length(pickle_file, output_file, min_length=None, max_length=None):
-    """This function takes a pickle file containing a Data instance and writes the contents to a tsv file
+    """This function takes a pickle file containing containing length data and writes the contents to a tsv file.
 
     param: pickle_file: Pickle file to convert.
     type: str
@@ -18,7 +18,7 @@ def convert_to_tsv_length(pickle_file, output_file, min_length=None, max_length=
     returns: None
     """
     data = Data.read(pickle_file)
-    if data.region_ids[0] == "region_sum":
+    if data.data.ndim == 1:
         data.data = [data.data]
 
     if min_length is None:

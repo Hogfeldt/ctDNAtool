@@ -9,7 +9,7 @@ from ..data import Data
 logger = logging.getLogger()
 
 
-def length_matrix(bam_file, bed_file, output_file, max_length=499, mapq=20):
+def length_matrix(bam_file, bed_file, output_file, max_length=500, mapq=20):
     """Creates a matrix where each row represents a region from the bed file
     and the columns are read lengths from 1 to max_length.
     The size of the matrix is (n x max_length) where n is the number of regions

@@ -12,7 +12,7 @@ logger = logging.getLogger()
 
 
 def length_end_seqs(
-    bam_file, bed_file, ref_genome_file, output_file, max_length=499, flank=1, mapq=20
+    bam_file, bed_file, ref_genome_file, output_file, max_length=500, flank=1, mapq=20
 ):
     """Create a tensor where the first dim. represents a region from the bed file,
     the second dim. represent read lengths from 1 to max_length and the third dim.

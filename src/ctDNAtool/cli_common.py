@@ -27,7 +27,7 @@ def min_length(function):
 def max_length(function):
     function = click.option(
         "--max-length",
-        default=499,
+        default=500,
         type=click.IntRange(min=1),
         help="Maximum read length to be counted",
     )(function)
