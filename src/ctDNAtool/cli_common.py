@@ -37,6 +37,41 @@ def map_quality(function):
     return function
 
 
+def pickle_output(function):
+    function = click.option(
+        "-p",
+        "--pickle-output",
+        is_flag=True,
+        help="Specifies if output should be to .pickle",
+    )(function)
+
+    return function
+
+
+def lower_bound(function):
+    function = click.option(
+        "-l",
+        "--lower-bound",
+        default=1,
+        type=click.IntRange(min=1),
+        help="Minimum length of reads when outputting to tsv",
+    )(function)
+
+    return function
+
+
+def upper_bound(function):
+    function = click.option(
+        "-l",
+        "--upper-bound",
+        default=500,
+        type=click.IntRange(min=1),
+        help="Maximum length of reads when outputting to tsv",
+    )(function)
+
+    return function
+
+
 def mbp(function):
     function = click.option(
         "-m",

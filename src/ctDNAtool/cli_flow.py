@@ -1,5 +1,6 @@
 import click
 import tempfile
+import logging
 
 from .cli import (
     bin_genome,
@@ -7,8 +8,11 @@ from .cli import (
     generate_length,
     generate_length_end_seq,
     region_sum,
+    convert_to_tsv_length,
 )
 from . import cli_common
+
+logger = logging.getLogger()
 
 
 @click.group()
@@ -40,9 +44,12 @@ def cli_flow(quiet, debug):
 @cli_common.include_x
 @cli_common.max_length
 @cli_common.map_quality
+@cli_common.lower_bound
+@cli_common.upper_bound
+@cli_common.pickle_output
 @click.pass_context
 def length_data(
-    ctx, genome_ref_file, bam_file, output_file, include_x, max_length, map_quality
+    ctx, genome_ref_file, bam_file, output_file, include_x, max_length, map_quality, lower_bound, upper_bound, pickle_output,
 ):
     """This command outputs the length data of a sample, given a genome reference file.
     The regions are collapsed
@@ -51,26 +58,34 @@ def length_data(
 
           ctDNAflow length-data <reference_genome_path> <BAM_file_path>
     """
-    temp_bed_file = tempfile.NamedTemporaryFile()
-    temp_pickle_file = tempfile.NamedTemporaryFile()
+    temp_bed_file = tempfile.NamedTemporaryFile().name
+    temp_pickle_file = tempfile.NamedTemporaryFile().name
+    temp_output_file = tempfile.NamedTemporaryFile().name
+
+    if pickle_output:
+        logger.info("Exporting to .pickle file")
 
     ctx.invoke(
         bin_genome_chromosome,
         genome_ref_file=genome_ref_file,
-        output_file=temp_bed_file.name,
+        output_file=temp_bed_file,
         include_x=include_x,
     )
 
     ctx.invoke(
         generate_length,
         bam_file=bam_file,
-        bed_file=temp_bed_file.name,
-        output_file=temp_pickle_file.name,
+        bed_file=temp_bed_file,
+        output_file=temp_pickle_file,
         max_length=max_length,
         map_quality=map_quality,
     )
 
-    ctx.invoke(region_sum, sample_file=temp_pickle_file.name, output_file=output_file)
+    if pickle_output:
+        ctx.invoke(region_sum, sample_file=temp_pickle_file, output_file=output_file)
+    else:
+        ctx.invoke(region_sum, sample_file=temp_pickle_file, output_file=temp_output_file)
+        ctx.invoke(convert_to_tsv_length, input_file=temp_output_file, output_file=output_file, lower_bound=lower_bound, upper_bound=upper_bound)
 
 
 @cli_flow.command()
@@ -85,9 +100,12 @@ def length_data(
 @cli_common.include_x
 @cli_common.max_length
 @cli_common.map_quality
+@cli_common.lower_bound
+@cli_common.upper_bound
+@cli_common.pickle_output
 @click.pass_context
 def length_data_chr_bin(
-    ctx, genome_ref_file, bam_file, output_file, include_x, max_length, map_quality
+    ctx, genome_ref_file, bam_file, output_file, include_x, max_length, map_quality, lower_bound, upper_bound, pickle_output
 ):
     """This command outputs the length data of a sample, given a genome reference file.
     The data is binned in chromosomes
@@ -96,22 +114,38 @@ def length_data_chr_bin(
 
           ctDNAflow length-data-chr-bin <reference_genome_path> <BAM_file_path>
     """
-    temp_bed_file = tempfile.NamedTemporaryFile()
+    temp_bed_file = tempfile.NamedTemporaryFile().name
+    temp_output_file = tempfile.NamedTemporaryFile().name
+
+    if pickle_output:
+        logger.info("Exporting to .pickle file")
 
     ctx.invoke(
         bin_genome_chromosome,
         genome_ref_file=genome_ref_file,
-        output_file=temp_bed_file.name,
+        output_file=temp_bed_file,
         include_x=include_x,
     )
-    ctx.invoke(
-        generate_length,
-        bam_file=bam_file,
-        bed_file=temp_bed_file.name,
-        output_file=output_file,
-        max_length=max_length,
-        map_quality=map_quality,
-    )
+
+    if pickle_output:
+        ctx.invoke(
+            generate_length,
+            bam_file=bam_file,
+            bed_file=temp_bed_file,
+            output_file=output_file,
+            max_length=max_length,
+            map_quality=map_quality,
+        )
+    else:
+        ctx.invoke(
+            generate_length,
+            bam_file=bam_file,
+            bed_file=temp_bed_file,
+            output_file=temp_output_file,
+            max_length=max_length,
+            map_quality=map_quality,
+        )
+        ctx.invoke(convert_to_tsv_length, input_file=temp_output_file, output_file=output_file, lower_bound=lower_bound, upper_bound=upper_bound)
 
 
 @cli_flow.command()
@@ -127,9 +161,12 @@ def length_data_chr_bin(
 @cli_common.include_x
 @cli_common.max_length
 @cli_common.map_quality
+@cli_common.lower_bound
+@cli_common.upper_bound
+@cli_common.pickle_output
 @click.pass_context
 def length_data_bed_bin(
-    ctx, genome_ref_file, bam_file, output_file, mbp, include_x, max_length, map_quality
+    ctx, genome_ref_file, bam_file, output_file, mbp, include_x, max_length, map_quality, lower_bound, upper_bound, pickle_output
 ):
     """This command outputs the length data of a sample, given a genome reference file.
     The data is binned in the provided mpb size
@@ -137,23 +174,40 @@ def length_data_bed_bin(
     EXAMPLE:
 
         ctDNAflow length-data-bed-bin <reference_genome_path> <BAM_file_path>"""
-    temp_bed_file = tempfile.NamedTemporaryFile()
+
+    if pickle_output:
+        logger.info("Exporting to .pickle file")
+
+    temp_bed_file = tempfile.NamedTemporaryFile().name
+    temp_output_file = tempfile.NamedTemporaryFile().name
 
     ctx.invoke(
         bin_genome,
         genome_ref_file=genome_ref_file,
-        output_file=temp_bed_file.name,
+        output_file=temp_bed_file,
         mbp=mbp,
         include_x=include_x,
     )
-    ctx.invoke(
-        generate_length,
-        bam_file=bam_file,
-        bed_file=temp_bed_file.name,
-        output_file=output_file,
-        max_length=max_length,
-        map_quality=map_quality,
-    )
+
+    if pickle_output:
+        ctx.invoke(
+            generate_length,
+            bam_file=bam_file,
+            bed_file=temp_bed_file,
+            output_file=temp_output_file,
+            max_length=max_length,
+            map_quality=map_quality,
+        )
+        ctx.invoke(convert_to_tsv_length, input_file=temp_output_file, output_file=output_file, lower_bound=lower_bound, upper_bound=upper_bound)
+    else:
+        ctx.invoke(
+            generate_length,
+            bam_file=bam_file,
+            bed_file=temp_bed_file,
+            output_file=output_file,
+            max_length=max_length,
+            map_quality=map_quality,
+        )
 
 
 @cli_flow.command()
@@ -187,27 +241,27 @@ def length_seq_data(
 
           ctDNAflow length-seq-data <reference_genome_path> <BAM_file_path>
     """
-    temp_bed_file = tempfile.NamedTemporaryFile()
-    temp_pickle_file = tempfile.NamedTemporaryFile()
+    temp_bed_file = tempfile.NamedTemporaryFile().name
+    temp_pickle_file = tempfile.NamedTemporaryFile().name
 
     ctx.invoke(
         bin_genome_chromosome,
         genome_ref_file=genome_ref_file,
-        output_file=temp_bed_file.name,
+        output_file=temp_bed_file,
         include_x=include_x,
     )
 
     ctx.invoke(
         generate_length_end_seq,
         bam_file=bam_file,
-        bed_file=temp_bed_file.name,
-        output_file=temp_pickle_file.name,
+        bed_file=temp_bed_file,
+        output_file=temp_pickle_file,
         max_length=max_length,
         flank=flank,
         map_quality=map_quality,
     )
 
-    ctx.invoke(region_sum, sample_file=temp_pickle_file.name, output_file=output_file)
+    ctx.invoke(region_sum, sample_file=temp_pickle_file, output_file=output_file)
 
 
 @cli_flow.command()
@@ -241,18 +295,18 @@ def length_seq_data_chr_bin(
 
           ctDNAflow length-seq-data-chr-bin <reference_genome_path> <BAM_file_path>
     """
-    temp_bed_file = tempfile.NamedTemporaryFile()
+    temp_bed_file = tempfile.NamedTemporaryFile().name
 
     ctx.invoke(
         bin_genome_chromosome,
         genome_ref_file=genome_ref_file,
-        output_file=temp_bed_file.name,
+        output_file=temp_bed_file,
         include_x=include_x,
     )
     ctx.invoke(
         generate_length_end_seq,
         bam_file=bam_file,
-        bed_file=temp_bed_file.name,
+        bed_file=temp_bed_file,
         output_file=output_file,
         max_length=max_length,
         flank=flank,
@@ -283,19 +337,19 @@ def length_seq_data_bed_bin(
     EXAMPLE:
 
         ctDNAflow length-data-bed-bin <reference_genome_path> <BAM_file_path>"""
-    temp_bed_file = tempfile.NamedTemporaryFile()
+    temp_bed_file = tempfile.NamedTemporaryFile().name
 
     ctx.invoke(
         bin_genome,
         genome_ref_file=genome_ref_file,
-        output_file=temp_bed_file.name,
+        output_file=temp_bed_file,
         mbp=mbp,
         include_x=include_x,
     )
     ctx.invoke(
         generate_length_end_seq,
         bam_file=bam_file,
-        bed_file=temp_bed_file.name,
+        bed_file=temp_bed_file,
         output_file=output_file,
         max_length=max_length,
         map_quality=map_quality,
