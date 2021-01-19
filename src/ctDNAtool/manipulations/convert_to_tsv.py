@@ -18,9 +18,10 @@ def convert_to_tsv_length(pickle_file, output_file, lower_bound, upper_bound):
     returns: None
     """
     data = Data.read(pickle_file)
+    if data.region_ids[0] == "region_sum":
+        data.data = [data.data]
 
     assert upper_bound > lower_bound, "Higher bound should be higher than lower bound"
-
     assert len(data.data[0]) >= upper_bound - 1, "Upper bound out of range"
 
     with open(output_file, "w") as fp:
