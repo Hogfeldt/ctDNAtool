@@ -36,7 +36,7 @@ def convert_to_tsv_length(pickle_file, output_file, lower_bound, upper_bound):
 
 
 def _get_row_from_range(row, lower, upper):
-    return list(map(str, row[lower - 1 : upper]))
+    return list(map(str, row[lower - 1: upper]))
 
 
 def generate_lengths(lower_bound, upper_bound):
