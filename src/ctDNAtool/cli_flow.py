@@ -49,7 +49,16 @@ def cli_flow(quiet, debug):
 @cli_common.pickle_output
 @click.pass_context
 def length_data(
-    ctx, genome_ref_file, bam_file, output_file, include_x, max_length, map_quality, lower_bound, upper_bound, pickle_output,
+    ctx,
+    genome_ref_file,
+    bam_file,
+    output_file,
+    include_x,
+    max_length,
+    map_quality,
+    lower_bound,
+    upper_bound,
+    pickle_output,
 ):
     """This command outputs the length data of a sample, given a genome reference file.
     The regions are collapsed
@@ -84,8 +93,16 @@ def length_data(
     if pickle_output:
         ctx.invoke(region_sum, sample_file=temp_pickle_file, output_file=output_file)
     else:
-        ctx.invoke(region_sum, sample_file=temp_pickle_file, output_file=temp_output_file)
-        ctx.invoke(convert_to_tsv_length, input_file=temp_output_file, output_file=output_file, lower_bound=lower_bound, upper_bound=upper_bound)
+        ctx.invoke(
+            region_sum, sample_file=temp_pickle_file, output_file=temp_output_file
+        )
+        ctx.invoke(
+            convert_to_tsv_length,
+            input_file=temp_output_file,
+            output_file=output_file,
+            lower_bound=lower_bound,
+            upper_bound=upper_bound,
+        )
 
 
 @cli_flow.command()
@@ -105,7 +122,16 @@ def length_data(
 @cli_common.pickle_output
 @click.pass_context
 def length_data_chr_bin(
-    ctx, genome_ref_file, bam_file, output_file, include_x, max_length, map_quality, lower_bound, upper_bound, pickle_output
+    ctx,
+    genome_ref_file,
+    bam_file,
+    output_file,
+    include_x,
+    max_length,
+    map_quality,
+    lower_bound,
+    upper_bound,
+    pickle_output,
 ):
     """This command outputs the length data of a sample, given a genome reference file.
     The data is binned in chromosomes
@@ -145,7 +171,13 @@ def length_data_chr_bin(
             max_length=max_length,
             map_quality=map_quality,
         )
-        ctx.invoke(convert_to_tsv_length, input_file=temp_output_file, output_file=output_file, lower_bound=lower_bound, upper_bound=upper_bound)
+        ctx.invoke(
+            convert_to_tsv_length,
+            input_file=temp_output_file,
+            output_file=output_file,
+            lower_bound=lower_bound,
+            upper_bound=upper_bound,
+        )
 
 
 @cli_flow.command()
@@ -166,7 +198,17 @@ def length_data_chr_bin(
 @cli_common.pickle_output
 @click.pass_context
 def length_data_bed_bin(
-    ctx, genome_ref_file, bam_file, output_file, mbp, include_x, max_length, map_quality, lower_bound, upper_bound, pickle_output
+    ctx,
+    genome_ref_file,
+    bam_file,
+    output_file,
+    mbp,
+    include_x,
+    max_length,
+    map_quality,
+    lower_bound,
+    upper_bound,
+    pickle_output,
 ):
     """This command outputs the length data of a sample, given a genome reference file.
     The data is binned in the provided mpb size
@@ -198,7 +240,13 @@ def length_data_bed_bin(
             max_length=max_length,
             map_quality=map_quality,
         )
-        ctx.invoke(convert_to_tsv_length, input_file=temp_output_file, output_file=output_file, lower_bound=lower_bound, upper_bound=upper_bound)
+        ctx.invoke(
+            convert_to_tsv_length,
+            input_file=temp_output_file,
+            output_file=output_file,
+            lower_bound=lower_bound,
+            upper_bound=upper_bound,
+        )
     else:
         ctx.invoke(
             generate_length,

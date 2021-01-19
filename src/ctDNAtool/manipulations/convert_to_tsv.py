@@ -19,9 +19,7 @@ def convert_to_tsv_length(pickle_file, output_file, lower_bound, upper_bound):
     """
     data = Data.read(pickle_file)
 
-    assert (
-            upper_bound > lower_bound
-    ), "Higher bound should be higher than lower bound"
+    assert upper_bound > lower_bound, "Higher bound should be higher than lower bound"
 
     assert len(data.data[0]) >= upper_bound - 1, "Upper bound out of range"
 
@@ -32,14 +30,12 @@ def convert_to_tsv_length(pickle_file, output_file, lower_bound, upper_bound):
         writer.writerow(["Region ID"] + lengths)
 
         for region_id, row in zip(data.region_ids, data.data):
-            row_from_range = _get_row_from_range(
-                row, lower_bound, upper_bound
-            )
+            row_from_range = _get_row_from_range(row, lower_bound, upper_bound)
             writer.writerow([region_id] + row_from_range)
 
 
 def _get_row_from_range(row, lower, upper):
-    return list(map(str, row[lower - 1: upper]))
+    return list(map(str, row[lower - 1 : upper]))
 
 
 def generate_lengths(lower_bound, upper_bound):
