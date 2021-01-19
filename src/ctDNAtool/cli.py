@@ -115,13 +115,11 @@ def region_sum(sample_file, output_file):
 
 @cli.command()
 @click.argument("input_file")
-@click.option("-o", "--output-file", default="output.csv")
-@cli_common.lower_bound
-@cli_common.upper_bound
-def convert_to_tsv_length(input_file, output_file, lower_bound, upper_bound):
-    manipulations.convert_to_tsv_length(
-        input_file, output_file, lower_bound, upper_bound
-    )
+@click.option("-o", "--output-file", default="tsv_length_matrix.csv")
+@cli_common.min_length
+@cli_common.max_length
+def convert_to_tsv_length(input_file, output_file, min_length, max_length):
+    manipulations.convert_to_tsv_length(input_file, output_file, min_length, max_length)
 
 
 @cli.command()

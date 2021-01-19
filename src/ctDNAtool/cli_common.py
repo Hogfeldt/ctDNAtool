@@ -13,11 +13,21 @@ def include_x(function):
     return function
 
 
+def min_length(function):
+    function = click.option(
+        "--min-length",
+        default=1,
+        type=click.IntRange(min=1),
+        help="Minimum read length to be counted",
+    )(function)
+
+    return function
+
+
 def max_length(function):
     function = click.option(
-        "-m",
         "--max-length",
-        default=500,
+        default=499,
         type=click.IntRange(min=1),
         help="Maximum read length to be counted",
     )(function)
@@ -43,30 +53,6 @@ def pickle_output(function):
         "--pickle-output",
         is_flag=True,
         help="Specifies if output should be to .pickle",
-    )(function)
-
-    return function
-
-
-def lower_bound(function):
-    function = click.option(
-        "-l",
-        "--lower-bound",
-        default=1,
-        type=click.IntRange(min=1),
-        help="Minimum length of reads when outputting to tsv",
-    )(function)
-
-    return function
-
-
-def upper_bound(function):
-    function = click.option(
-        "-l",
-        "--upper-bound",
-        default=500,
-        type=click.IntRange(min=1),
-        help="Maximum length of reads when outputting to tsv",
     )(function)
 
     return function

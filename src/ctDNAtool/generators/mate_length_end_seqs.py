@@ -11,7 +11,7 @@ logger = logging.getLogger()
 
 
 def mate_length_end_seqs(
-    bam_file, bed_file, ref_genome_file, output_file, max_length=500, flank=1, mapq=20
+    bam_file, bed_file, ref_genome_file, output_file, max_length=499, flank=1, mapq=20
 ):
     """Create a tensor where the first dim. represents a whether a read came from
     the first or the second mate, the second dim. represent read lengths from 0 to
@@ -29,13 +29,17 @@ def mate_length_end_seqs(
     :type ref_genome_file: str
     :param max_length: Maximum read length to be counted
     :type max_length: int > 0
+    :param flank: Determines how many base pairs are examined in each end.
+    type flank: Int
+    param mapq: map quality. Ignores all reads below the threshold.
+    type mapq: Int
     :returns:  None
     """
     region_lst = load_bed_file(bed_file)
     bam = BAM(bam_file)
     id_lst = ["first_mate", "second_mate"]
     N_seqs = 4 ** (2 * flank) + 1  # the last bin is for sequences containing N
-    T = np.zeros((2, max_length - 1, N_seqs), dtype=np.uint32)
+    T = np.zeros((2, max_length, N_seqs), dtype=np.uint32)
     try:
         tb = py2bit.open(ref_genome_file)
         chroms_lengths = tb.chroms()
@@ -45,7 +49,7 @@ def mate_length_end_seqs(
             ):
                 length = read.length
                 if (
-                    length < max_length
+                    length <= max_length
                     and chroms_lengths[region.chrom] >= (read.end + flank)
                     and 0 <= (read.start - flank)
                 ):
@@ -53,8 +57,8 @@ def mate_length_end_seqs(
                         tb, region.chrom, read.start, read.end, flank
                     )
                     start_mate, end_mate = (0, 1) if read.start_is_first else (1, 0)
-                    T[start_mate, length - 1, seq_to_index(start_seq)] += 1
-                    T[end_mate, length - 1, seq_to_index(end_seq)] += 1
+                    T[start_mate, length, seq_to_index(start_seq)] += 1
+                    T[end_mate, length, seq_to_index(end_seq)] += 1
         logger.info(str(bam))
         Data.write(Data(T, id_lst, bam.report), output_file)
     finally:
