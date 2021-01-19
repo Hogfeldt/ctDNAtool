@@ -230,6 +230,15 @@ def length_data_bed_bin(
             generate_length,
             bam_file=bam_file,
             bed_file=temp_bed_file,
+            output_file=output_file,
+            max_length=max_length,
+            map_quality=map_quality,
+        )
+    else:
+        ctx.invoke(
+            generate_length,
+            bam_file=bam_file,
+            bed_file=temp_bed_file,
             output_file=temp_output_file,
             max_length=max_length,
             map_quality=map_quality,
@@ -241,15 +250,7 @@ def length_data_bed_bin(
             min_length=min_length,
             max_length=max_length,
         )
-    else:
-        ctx.invoke(
-            generate_length,
-            bam_file=bam_file,
-            bed_file=temp_bed_file,
-            output_file=output_file,
-            max_length=max_length,
-            map_quality=map_quality,
-        )
+
 
 
 @cli_flow.command()
