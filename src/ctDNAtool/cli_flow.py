@@ -252,7 +252,6 @@ def length_data_bed_bin(
         )
 
 
-
 @cli_flow.command()
 @click.argument("genome_ref_file")
 @click.argument("bam_file")
