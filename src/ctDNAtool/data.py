@@ -1,6 +1,6 @@
-import pickle
 import logging
 from scipy.sparse import issparse
+from .utils import pickle_read, pickle_write
 
 logger = logging.getLogger()
 
@@ -25,19 +25,20 @@ class Data:
 
     @staticmethod
     def read(file_path):
-        with open(file_path, "rb") as fp:
-            return pickle.load(fp)
+        return pickle_read(file_path)
 
     @staticmethod
     def write(data, file_path):
-        with open(file_path, "wb") as fp:
-            logger.debug(f"Writing data to {file_path}")
-            pickle.dump(data, fp)
+        pickle_write(data, file_path)
 
-    def __determine_structure_and_dtype(self, data):
+    @staticmethod
+    def __determine_structure_and_dtype(data):
         is_sparse = issparse(data[0])
         if is_sparse:
             dtype = data[0].dtype
         else:
             dtype = data.dtype
         return (is_sparse, dtype)
+
+    def __str__(self):
+        return f"is sparse: {self.is_sparse}, data shape {self.data.shape}"

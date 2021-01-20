@@ -123,6 +123,13 @@ def convert_to_tsv_length(input_file, output_file, min_length, max_length):
 
 
 @cli.command()
+@click.option("-o", "--output-file", default="combined_data.pickle")
+@click.argument("input_files", nargs=-1)
+def combine_data(output_file, input_files):
+    manipulations.combine_data(output_file, input_files)
+
+
+@cli.command()
 @click.argument("input_sample")
 @click.argument("ids_file")
 @click.option("-o", "--output-file", default="subset_sample.pickle")
