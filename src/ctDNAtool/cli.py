@@ -57,7 +57,7 @@ def generate_length(bam_file, bed_file, output_file, max_length, map_quality):
 @click.argument("bam_file")
 @click.argument("bed_file")
 @click.argument("reference_genome")
-@click.option("-o", "--output-file", default="length_matrix.pickle")
+@click.option("-o", "--output-file", default="length_seq_matrix.pickle")
 @cli_common.max_length
 @cli_common.flank
 @cli_common.map_quality

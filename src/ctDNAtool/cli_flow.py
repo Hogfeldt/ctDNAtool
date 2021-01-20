@@ -19,7 +19,7 @@ logger = logging.getLogger()
 @cli_common.quiet
 @cli_common.debug
 def cli_flow(quiet, debug):
-    """ctDNAflow is a tool for running workflows based on the atomic commands found in ctDNAtool.
+    """ctDNAflow is a tool for running workflows based on the commands found in ctDNAtool.
 
     The workflows are compositions of multiple commands from ctDNAtool, and are design for ease of use.
 
@@ -38,8 +38,8 @@ def cli_flow(quiet, debug):
 @click.option(
     "-o",
     "--output-file",
-    default="length_matrix.pickle",
-    help="Output file name. Default output to length_matrix.pickle",
+    default="length_matrix.tsv",
+    help="Output file name. Default output to length_matrix.tsv",
 )
 @cli_common.include_x
 @cli_common.min_length
@@ -59,7 +59,8 @@ def length_data(
     pickle_output,
 ):
     """This command outputs the length data of a sample, given a genome reference file.
-    The regions are collapsed
+    The regions are collapsed.
+    Default output is .tsv.
 
     EXAMPLE:
 
@@ -109,8 +110,8 @@ def length_data(
 @click.option(
     "-o",
     "--output-file",
-    default="length_matrix.pickle",
-    help="Output file name. Default output to length_matrix.pickle",
+    default="length_matrix.tsv",
+    help="Output file name. Default output to length_matrix.tsv",
 )
 @cli_common.include_x
 @cli_common.min_length
@@ -130,7 +131,8 @@ def length_data_chr_bin(
     pickle_output,
 ):
     """This command outputs the length data of a sample, given a genome reference file.
-    The data is binned in chromosomes
+    The data is binned in chromosomes.
+    Default output is .tsv.
 
     EXAMPLE:
 
@@ -182,8 +184,8 @@ def length_data_chr_bin(
 @click.option(
     "-o",
     "--output-file",
-    default="length_matrix.pickle",
-    help="Output file name. Default output to length_matrix.pickle",
+    default="length_matrix.tsv",
+    help="Output file name. Default output to length_matrix.tsv",
 )
 @cli_common.mbp
 @cli_common.include_x
@@ -205,7 +207,8 @@ def length_data_bed_bin(
     pickle_output,
 ):
     """This command outputs the length data of a sample, given a genome reference file.
-    The data is binned in the provided mpb size
+    The data is binned in the provided mpb size.
+    Default output is .tsv.
 
     EXAMPLE:
 
@@ -276,8 +279,8 @@ def length_seq_data(
     flank,
     map_quality,
 ):
-    """This command outputs the end sequence and length data of a sample, given a genome reference file.
-    Chromosome regions is collapsed
+    """This command outputs the end sequence and length data of a sample to a .pickle file, given a genome reference file.
+    Chromosome regions is collapsed.
 
     EXAMPLE:
 
@@ -330,7 +333,7 @@ def length_seq_data_chr_bin(
     flank,
     map_quality,
 ):
-    """This command outputs the end sequence and length data of a sample, given a genome reference file.
+    """This command outputs the end sequence and length data of a sample to a .pickle file, given a genome reference file.
     The data is binned in chromosomes
 
     EXAMPLE:
@@ -373,7 +376,7 @@ def length_seq_data_chr_bin(
 def length_seq_data_bed_bin(
     ctx, genome_ref_file, bam_file, output_file, mbp, include_x, max_length, map_quality
 ):
-    """This command outputs the length data of a sample, given a genome reference file.
+    """This command outputs the length data of a sample to a .pickle file, given a genome reference file.
     The data is binned in the provided mpb size
 
     EXAMPLE:

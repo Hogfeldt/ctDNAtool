@@ -1,5 +1,8 @@
 from ..data import Data
+import logging
 from ..utils import tsv_writer
+
+logger = logging.getLogger()
 
 
 def convert_to_tsv_length(pickle_file, output_file, min_length=None, max_length=None):
@@ -32,6 +35,7 @@ def convert_to_tsv_length(pickle_file, output_file, min_length=None, max_length=
 
     with open(output_file, "w") as fp:
         writer = tsv_writer(fp)
+        logger.debug(f"Writing data to {output_file}")
 
         lengths = generate_lengths(min_length, max_length)
         writer.writerow(["Region ID"] + lengths)
