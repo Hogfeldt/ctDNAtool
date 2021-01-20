@@ -1,5 +1,4 @@
 import attr
-import csv
 
 from .transcript_annotation import (
     pull_tx_id,
@@ -9,6 +8,7 @@ from .transcript_annotation import (
 )
 from .tss import TranscriptionStartSite, get_header
 from .utils import is_autosome
+from ..utils import tsv_writer
 
 
 @attr.s
@@ -83,7 +83,7 @@ def find_tss(input_file, region_size, bed_file, tss_file):
         else:
             TSS_dict[tss.tss_id] = tss
     with open(bed_file, "w") as fp_bed:
-        bed_writer = csv.writer(fp_bed, delimiter="\t")
+        bed_writer = tsv_writer(fp_bed)
         bed_writer.writerow(["#chrom", "start", "end", "name", "score", "strand"])
         k = int(region_size / 2)
         with open(tss_file, "w") as fp_tss:

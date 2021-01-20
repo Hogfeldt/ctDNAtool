@@ -15,7 +15,7 @@ def length_end_seqs(
     bam_file, bed_file, ref_genome_file, output_file, max_length=500, flank=1, mapq=20
 ):
     """Create a tensor where the first dim. represents a region from the bed file,
-    the second dim. represent read lengths from 0 to max_length and the third dim.
+    the second dim. represent read lengths from 1 to max_length and the third dim.
     represents the the concatenation of the sequenses at the fragment ends, taken
     from the reference genome, endcoded as an index. Then length of an end sequence
     is 2 times the flank parameter.
@@ -30,6 +30,10 @@ def length_end_seqs(
     :type ref_genome_file: str
     :param max_length: Maximum read length to be counted
     :type max_length: int > 0
+    :param flank: Determines how many base pairs are examined in each end.
+    type flank: Int
+    param mapq: map quality. Ignores all reads below the threshold.
+    type mapq: Int
     :returns:  None
     """
     region_lst = load_bed_file(bed_file)
@@ -41,13 +45,13 @@ def length_end_seqs(
         tb = py2bit.open(ref_genome_file)
         chroms_lengths = tb.chroms()
         for i, region in enumerate(region_lst):
-            matrix = dok_matrix((max_length - 1, N_seqs), dtype=np.uint32)
+            matrix = dok_matrix((max_length, N_seqs), dtype=np.uint32)
             for read in bam.pair_generator(
                 region.chrom, region.start, region.end, mapq
             ):
                 length = read.length
                 if (
-                    length < max_length
+                    length <= max_length
                     and chroms_lengths[region.chrom] >= (read.end + flank)
                     and 0 <= (read.start - flank)
                 ):

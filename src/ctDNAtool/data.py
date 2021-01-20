@@ -1,5 +1,8 @@
 import pickle
+import logging
 from scipy.sparse import issparse
+
+logger = logging.getLogger()
 
 
 def astype(dtype, sample):
@@ -28,6 +31,7 @@ class Data:
     @staticmethod
     def write(data, file_path):
         with open(file_path, "wb") as fp:
+            logger.debug(f"Writing data to {file_path}")
             pickle.dump(data, fp)
 
     def __determine_structure_and_dtype(self, data):

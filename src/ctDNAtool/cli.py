@@ -57,7 +57,7 @@ def generate_length(bam_file, bed_file, output_file, max_length, map_quality):
 @click.argument("bam_file")
 @click.argument("bed_file")
 @click.argument("reference_genome")
-@click.option("-o", "--output-file", default="length_matrix.pickle")
+@click.option("-o", "--output-file", default="length_seq_matrix.pickle")
 @cli_common.max_length
 @cli_common.flank
 @cli_common.map_quality
@@ -111,6 +111,15 @@ def sample_sum(sample_files, output_file, uint32):
 @click.option("-o", "--output-file", default="collapsed_sample.pickle")
 def region_sum(sample_file, output_file):
     manipulations.region_sum(sample_file, output_file)
+
+
+@cli.command()
+@click.argument("input_file")
+@click.option("-o", "--output-file", default="tsv_length_matrix.csv")
+@cli_common.min_length
+@cli_common.max_length
+def convert_to_tsv_length(input_file, output_file, min_length, max_length):
+    manipulations.convert_to_tsv_length(input_file, output_file, min_length, max_length)
 
 
 @cli.command()

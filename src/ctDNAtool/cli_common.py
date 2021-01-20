@@ -13,9 +13,19 @@ def include_x(function):
     return function
 
 
+def min_length(function):
+    function = click.option(
+        "--min-length",
+        default=1,
+        type=click.IntRange(min=1),
+        help="Minimum read length to be counted",
+    )(function)
+
+    return function
+
+
 def max_length(function):
     function = click.option(
-        "-m",
         "--max-length",
         default=500,
         type=click.IntRange(min=1),
@@ -32,6 +42,17 @@ def map_quality(function):
         default=20,
         type=click.IntRange(min=0),
         help="Minimum map quality",
+    )(function)
+
+    return function
+
+
+def pickle_output(function):
+    function = click.option(
+        "-p",
+        "--pickle-output",
+        is_flag=True,
+        help="Specifies if output should be to .pickle",
     )(function)
 
     return function
