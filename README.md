@@ -35,7 +35,7 @@ The workflows are compositions of multiple commands from ctDNAtool, and are desi
 Usage:
 
 ``` console
-$ cDNAflow length-data-bed-bin <reference_genome_path> <BAM_file_path>
+$ ctDNAflow length-data-bed-bin <reference_genome_path> <BAM_file_path>
 
 $ ctDNAflow length-data-chr-bin <reference_genome_path> <BAM_file_path>
 ```
