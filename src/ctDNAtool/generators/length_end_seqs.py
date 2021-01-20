@@ -56,7 +56,7 @@ def length_end_seqs(
                     and 0 <= (read.start - flank)
                 ):
                     seq = fetch_seq(tb, region.chrom, read.start, read.end, flank)
-                    matrix[length, seq_to_index(seq)] += 1
+                    matrix[length - 1, seq_to_index(seq)] += 1
             tensor[i] = csr_matrix(matrix)
             id_lst.append(region.region_id)
         logger.info(str(bam))
