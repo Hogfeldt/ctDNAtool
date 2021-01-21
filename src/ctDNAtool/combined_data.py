@@ -2,8 +2,9 @@ from .utils import pickle_read, pickle_write
 
 
 class CombinedData:
-    def __init__(self, IDs, data):
+    def __init__(self, IDs, regions_ids, data):
         self.IDs = IDs
+        self.region_ids = regions_ids
         self.data = data
 
     @staticmethod

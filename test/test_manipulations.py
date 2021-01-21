@@ -1,5 +1,6 @@
 import numpy as np
 import tempfile
+import pytest
 
 import ctDNAtool.manipulations as mut
 import ctDNAtool.combined_data as combined_data
@@ -63,22 +64,135 @@ class Test_stride_binning:
         ).reshape((5, 5))
         assert np.array_equal(R, T) is True
 
-    def test_combine_data(self):
+
+class Test_combine_data:
+    def test_combine_data_2dim(self):
         """Test that to Data instances is correctly combined with combine_data"""
-        data1 = data.Data(np.array([1, 2, 3]), np.array(["region_id"]), None)
-        data2 = data.Data(np.array([4, 5, 6]), np.array(["region_id"]), None)
-        data1_file = tempfile.NamedTemporaryFile().name
-        data.Data.write(data1, data1_file)
-        data2_file = tempfile.NamedTemporaryFile().name
-        data.Data.write(data2, data2_file)
-        output_file = tempfile.NamedTemporaryFile().name
+        (
+            data1,
+            data1_file,
+            data2,
+            data2_file,
+            output_file,
+        ) = self._generate_test_data_2dim()
 
         mut.combine_data(output_file, [data1_file, data2_file])
         data_combined = combined_data.CombinedData.read(output_file)
 
         assert data_combined.IDs[0] == data1_file.split("/")[-1]
         assert data_combined.IDs[1] == data2_file.split("/")[-1]
-        assert (data_combined.data[0].data == data1.data).all()
-        assert (data_combined.data[1].data == data2.data).all()
+
+        print(data_combined.data)
+
+        assert (data_combined.data[0] == data1.data).all()
+        assert (data_combined.data[1] == data2.data).all()
         assert data_combined.IDs.shape == (2,)
-        assert data_combined.data.shape == (2,)
+        assert data_combined.data.shape == (2, 3, 2)
+
+    def test_combine_data_3dim(self):
+        """Test that to Data instances is correctly combined with combine_data"""
+        (
+            data1,
+            data1_file,
+            data2,
+            data2_file,
+            output_file,
+        ) = self._generate_test_data_3dim()
+
+        mut.combine_data(output_file, [data1_file, data2_file])
+        data_combined = combined_data.CombinedData.read(output_file)
+
+        assert (data_combined.data[0] == data1.data).all()
+        assert (data_combined.data[1] == data2.data).all()
+        assert data_combined.IDs.shape == (2,)
+        assert data_combined.data.shape == (2, 3, 2, 2)
+
+    def test_combine_data_wrong_data_dimensions(self):
+        """Test that to Data instances is correctly combined with combine_data"""
+        (
+            data1,
+            data1_file,
+            data2,
+            data2_file,
+            output_file,
+        ) = self._generate_test_data_2dim()
+        data2 = data.Data(
+            np.array([[40], [50], [60]]), np.array(["chr1", "chr2", "chr3"]), None
+        )
+        data2_file = _write_temp_data_file(data2)
+
+        with pytest.raises(AssertionError):
+            mut.combine_data(output_file, [data1_file, data2_file])
+
+    def test_combine_data_region_id_mismatch(self):
+        """Test that to Data instances is correctly combined with combine_data"""
+        (
+            data1,
+            data1_file,
+            data2,
+            data2_file,
+            output_file,
+        ) = self._generate_test_data_2dim()
+        data2 = data.Data(
+            np.array([[40, 44], [50, 55], [60, 60]]),
+            np.array(["chr1", "chr2", "WRONG_REGION_ID"]),
+            None,
+        )
+        data2_file = _write_temp_data_file(data2)
+
+        with pytest.raises(AssertionError):
+            mut.combine_data(output_file, [data1_file, data2_file])
+
+    @staticmethod
+    def _generate_test_data_2dim():
+        data1 = data.Data(
+            np.array([[10, 11], [20, 22], [30, 33]]),
+            np.array(["chr1", "chr2", "chr3"]),
+            None,
+        )
+        data2 = data.Data(
+            np.array([[40, 44], [50, 55], [60, 66]]),
+            np.array(["chr1", "chr2", "chr3"]),
+            None,
+        )
+        data1_file = _write_temp_data_file(data1)
+        data2_file = _write_temp_data_file(data2)
+        output_file = tempfile.NamedTemporaryFile().name
+
+        return data1, data1_file, data2, data2_file, output_file
+
+    @staticmethod
+    def _generate_test_data_3dim():
+        data1 = data.Data(
+            np.array(
+                [
+                    [[100, 101], [110, 111]],
+                    [[200, 202], [220, 222]],
+                    [[300, 301], [330, 3333]],
+                ]
+            ),
+            np.array(["chr1", "chr2", "chr3"]),
+            None,
+        )
+        data2 = data.Data(
+            np.array(
+                [
+                    [[400, 404], [440, 444]],
+                    [[500, 505], [550, 555]],
+                    [[600, 606], [660, 666]],
+                ]
+            ),
+            np.array(["chr1", "chr2", "chr3"]),
+            None,
+        )
+        data1_file = _write_temp_data_file(data1)
+        data2_file = _write_temp_data_file(data2)
+        output_file = tempfile.NamedTemporaryFile().name
+
+        return data1, data1_file, data2, data2_file, output_file
+
+
+def _write_temp_data_file(data1):
+    file = tempfile.NamedTemporaryFile().name
+    data.Data.write(data1, file)
+    return file
