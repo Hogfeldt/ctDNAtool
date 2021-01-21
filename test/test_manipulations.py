@@ -1,4 +1,5 @@
 import numpy as np
+from scipy.sparse import csr_matrix
 import tempfile
 import pytest
 
@@ -67,7 +68,7 @@ class Test_stride_binning:
 
 class Test_combine_data:
     def test_combine_data_2dim(self):
-        """Test that to Data instances is correctly combined with combine_data"""
+        """Test that to Data instances is correctly combined with combine_data using 2 dimensional test data"""
         (
             data1,
             data1_file,
@@ -79,15 +80,14 @@ class Test_combine_data:
         mut.combine_data(output_file, [data1_file, data2_file])
         data_combined = combined_data.CombinedData.read(output_file)
 
-        assert data_combined.IDs[0] == data1_file.split("/")[-1]
-        assert data_combined.IDs[1] == data2_file.split("/")[-1]
+        self.assert_ids(data1_file, data2_file, data_combined)
         assert (data_combined.data[0] == data1.data).all()
         assert (data_combined.data[1] == data2.data).all()
         assert data_combined.IDs.shape == (2,)
         assert data_combined.data.shape == (2, 3, 2)
 
     def test_combine_data_3dim(self):
-        """Test that to Data instances is correctly combined with combine_data"""
+        """Test that to Data instances is correctly combined with combine_data using 2 dimensional test data"""
         (
             data1,
             data1_file,
@@ -104,8 +104,26 @@ class Test_combine_data:
         assert data_combined.IDs.shape == (2,)
         assert data_combined.data.shape == (2, 3, 2, 2)
 
+    def test_combine_data_sparse(self):
+        """Test that combine works for sparse data"""
+        (
+            data1,
+            data1_file,
+            data2,
+            data2_file,
+            output_file,
+        ) = self._generate_sparse_test_data_3dim()
+
+        mut.combine_data(output_file, [data1_file, data2_file])
+        data_combined = combined_data.CombinedData.read(output_file)
+
+        self.assert_sparse_data(data1, data2, data_combined)
+        self.assert_ids(data1_file, data2_file, data_combined)
+        assert data_combined.IDs.shape == (2,)
+        assert data_combined.data.shape == (2, 3)
+
     def test_combine_data_wrong_data_dimensions(self):
-        """Test that to Data instances is correctly combined with combine_data"""
+        """Test that combine_data fails an assert when data dimensions doesn't match"""
         (
             data1,
             data1_file,
@@ -122,7 +140,7 @@ class Test_combine_data:
             mut.combine_data(output_file, [data1_file, data2_file])
 
     def test_combine_data_region_id_mismatch(self):
-        """Test that to Data instances is correctly combined with combine_data"""
+        """Test that combine_data fails an assert when data region ids doesn't match"""
         (
             data1,
             data1_file,
@@ -143,12 +161,12 @@ class Test_combine_data:
     @staticmethod
     def _generate_test_data_2dim():
         data1 = data.Data(
-            np.array([[10, 11], [20, 22], [30, 33]]),
+            np.array([[10, 11], [20, 22], [0, 0]]),
             np.array(["chr1", "chr2", "chr3"]),
             None,
         )
         data2 = data.Data(
-            np.array([[40, 44], [50, 55], [60, 66]]),
+            np.array([[40, 44], [0, 0], [60, 66]]),
             np.array(["chr1", "chr2", "chr3"]),
             None,
         )
@@ -187,6 +205,50 @@ class Test_combine_data:
         output_file = tempfile.NamedTemporaryFile().name
 
         return data1, data1_file, data2, data2_file, output_file
+
+    @staticmethod
+    def _generate_sparse_test_data_3dim():
+        data1 = data.Data(
+            np.array(
+                [
+                    csr_matrix([[100, 101], [110, 111]]),
+                    csr_matrix([[200, 202], [220, 222]]),
+                    csr_matrix([[300, 301], [330, 3333]]),
+                ]
+            ),
+            np.array(["chr1", "chr2", "chr3"]),
+            None,
+        )
+        data2 = data.Data(
+            np.array(
+                [
+                    csr_matrix([[400, 404], [440, 444]]),
+                    csr_matrix([[500, 505], [550, 555]]),
+                    csr_matrix([[600, 606], [660, 666]]),
+                ]
+            ),
+            np.array(["chr1", "chr2", "chr3"]),
+            None,
+        )
+        data1_file = _write_temp_data_file(data1)
+        data2_file = _write_temp_data_file(data2)
+        output_file = tempfile.NamedTemporaryFile().name
+
+        return data1, data1_file, data2, data2_file, output_file
+
+    @staticmethod
+    def assert_ids(data1_file, data2_file, data_combined):
+        assert data_combined.IDs[0] == data1_file.split("/")[-1]
+        assert data_combined.IDs[1] == data2_file.split("/")[-1]
+
+    @staticmethod
+    def assert_sparse_data(data1, data2, data_combined):
+        assert (data_combined.data[0][0].todense() == data1.data[0].todense()).all()
+        assert (data_combined.data[0][1].todense() == data1.data[1].todense()).all()
+        assert (data_combined.data[0][2].todense() == data1.data[2].todense()).all()
+        assert (data_combined.data[1][0].todense() == data2.data[0].todense()).all()
+        assert (data_combined.data[1][1].todense() == data2.data[1].todense()).all()
+        assert (data_combined.data[1][2].todense() == data2.data[2].todense()).all()
 
 
 def _write_temp_data_file(data1):

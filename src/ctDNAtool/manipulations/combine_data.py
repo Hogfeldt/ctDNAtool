@@ -11,8 +11,9 @@ def combine_data(output_file, pickle_files):
     """Takes a collection of pickle files containing data and combines them into one .picke file"""
     IDs = np.empty(len(pickle_files), dtype=object)
     region_ids = []
-    data_shape = []
     data = []
+    data_shape = None
+    is_sparse = None
 
     for index, file in enumerate(pickle_files):
         logger.debug(f"Combining data from file {file}")
@@ -24,15 +25,16 @@ def combine_data(output_file, pickle_files):
         if index == 0:
             region_ids = tmp_data.region_ids
             data_shape = tmp_data.data.shape
+            is_sparse = tmp_data.is_sparse
         else:
             assert (
                 tmp_data.region_ids == region_ids
             ).all(), "Region IDs does not match for all samples"
             assert tmp_data.data.shape == data_shape, "Shape of data does not match"
+            assert tmp_data.is_sparse == is_sparse, "Data is_sparse does not match"
 
     combined_data = CombinedData(IDs, region_ids, np.array(data))
     CombinedData.write(combined_data, output_file)
-
     logger.debug(f"Data was combined into file {output_file}")
 
 
