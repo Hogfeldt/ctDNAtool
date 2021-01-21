@@ -81,9 +81,6 @@ class Test_combine_data:
 
         assert data_combined.IDs[0] == data1_file.split("/")[-1]
         assert data_combined.IDs[1] == data2_file.split("/")[-1]
-
-        print(data_combined.data)
-
         assert (data_combined.data[0] == data1.data).all()
         assert (data_combined.data[1] == data2.data).all()
         assert data_combined.IDs.shape == (2,)
