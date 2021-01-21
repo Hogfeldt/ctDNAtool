@@ -80,3 +80,5 @@ class Test_stride_binning:
         assert data_combined.IDs[1] == data2_file.split("/")[-1]
         assert (data_combined.data[0].data == data1.data).all()
         assert (data_combined.data[1].data == data2.data).all()
+        assert data_combined.IDs.shape == (2,)
+        assert data_combined.data.shape == (2,)

@@ -8,8 +8,7 @@ class CombinedData:
 
     @staticmethod
     def read(file_path):
-        file = pickle_read(file_path)
-        return file
+        return pickle_read(file_path)
 
     @staticmethod
     def write(data, file_path):

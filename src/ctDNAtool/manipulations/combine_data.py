@@ -21,7 +21,6 @@ def combine_data(output_file, pickle_files):
     combined_data = CombinedData(IDs, data)
     CombinedData.write(combined_data, output_file)
     logger.debug(f"Data was combine into file {output_file}")
-    print(combined_data)
 
 
 def _get_id_from_file_path(file_path):
