@@ -126,6 +126,7 @@ def convert_to_tsv_length(input_file, output_file, min_length, max_length):
 @click.option("-o", "--output-file", default="combined_data.pickle")
 @click.argument("input_files", nargs=-1)
 def combine_data(output_file, input_files):
+    """Combines multiple .pickle files with Data objects into one"""
     manipulations.combine_data(output_file, input_files)
 
 

@@ -16,4 +16,6 @@ class CombinedData:
         pickle_write(data, file_path)
 
     def __str__(self):
-        return "".join(self.IDs)
+        return "CombinedData instance containing the following IDs: " + ", ".join(
+            self.IDs
+        )
