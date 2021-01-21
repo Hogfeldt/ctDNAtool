@@ -26,4 +26,3 @@ def pickle_write(data, file_path):
     with open(file_path, "wb") as fp:
         logger.debug(f"Writing data to {file_path}")
         pickle.dump(data, fp)
-

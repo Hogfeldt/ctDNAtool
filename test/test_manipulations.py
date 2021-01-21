@@ -1,6 +1,9 @@
 import numpy as np
+import tempfile
 
 import ctDNAtool.manipulations as mut
+import ctDNAtool.combined_data as combined_data
+import ctDNAtool.data as data
 
 
 class Test_stride_binning:
@@ -59,3 +62,21 @@ class Test_stride_binning:
             [5 for _ in range(4 * 5)] + [3 for _ in range(5)], dtype=X.dtype
         ).reshape((5, 5))
         assert np.array_equal(R, T) is True
+
+    def test_combine_data(self):
+        """Test that to Data instances is correctly combined with combine_data"""
+        data1 = data.Data(np.array([1, 2, 3]), np.array(["region_id"]), None)
+        data2 = data.Data(np.array([4, 5, 6]), np.array(["region_id"]), None)
+        data1_file = tempfile.NamedTemporaryFile().name
+        data.Data.write(data1, data1_file)
+        data2_file = tempfile.NamedTemporaryFile().name
+        data.Data.write(data2, data2_file)
+        output_file = tempfile.NamedTemporaryFile().name
+
+        mut.combine_data(output_file, [data1_file, data2_file])
+        data_combined = combined_data.CombinedData.read(output_file)
+
+        assert data_combined.IDs[0] == data1_file.split("/")[-1]
+        assert data_combined.IDs[1] == data2_file.split("/")[-1]
+        assert (data_combined.data[0].data == data1.data).all()
+        assert (data_combined.data[1].data == data2.data).all()
