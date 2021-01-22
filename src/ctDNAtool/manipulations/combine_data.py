@@ -10,8 +10,8 @@ logger = logging.getLogger()
 def combine_data(output_file, pickle_files):
     """Takes a collection of pickle files containing data and combines them into one .picke file"""
     IDs = np.empty(len(pickle_files), dtype=object)
-    region_ids = []
     data = []
+    region_ids = None
     data_shape = None
     is_sparse = None
 
