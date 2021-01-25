@@ -125,3 +125,11 @@ def setup_debugger(quiet_flag, debug_flag):
         logger.setLevel(logging.CRITICAL)
     if debug_flag:
         logger.setLevel(logging.DEBUG)
+
+
+def get_files_from_file(fp):
+    with open(fp, "r") as f:
+        files = f.read().splitlines()
+        files = [file for file in files if file != "" and not file.isspace()]
+
+    return files
