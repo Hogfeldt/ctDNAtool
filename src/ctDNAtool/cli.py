@@ -39,6 +39,7 @@ def bin_genome(genome_ref_file, output_file, mbp, include_x):
 @click.option("-o", "--output_file")
 @cli_common.include_x
 def bin_genome_chromosome(genome_ref_file, output_file, include_x):
+    """This command will create a bed file, splitting the genome in bins of chromosomes."""
     chromosomes = Chromosomes.AUTOSOMES_X if include_x else Chromosomes.AUTOSOMES
     preprocessors.bin_genome_chromosome(genome_ref_file, output_file, chromosomes)
 
@@ -127,7 +128,7 @@ def convert_to_tsv_length(input_file, output_file, min_length, max_length):
 @click.option("-f", "--file-of-files", help="File containing files to be combined")
 @click.argument("input_files", nargs=-1)
 def combine_data(output_file, file_of_files, input_files):
-    """Combines multiple .pickle files with Data objects into one"""
+    """Combines multiple .pickle files with Data objects into one. Can optionally take a file of files as input"""
 
     if file_of_files:
         f = open(file_of_files, "r")
