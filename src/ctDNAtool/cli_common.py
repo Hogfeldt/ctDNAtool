@@ -94,6 +94,14 @@ def stride(function):
     return function
 
 
+def file_of_files(function):
+    function = click.option(
+        "-f", "--file-of-files", help="File containing files to be combined"
+    )(function)
+
+    return function
+
+
 def quiet(function):
     function = click.option(
         "-q", "--quiet", is_flag=True, help="Suppress logging output"

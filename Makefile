@@ -16,6 +16,9 @@ update: update-deps init
 test:
 	nox
 
+lint:
+	flake8 src/ctDNAtool test/
+
 clean:
 	find . -prune -name ".egg-info" -type d -exec rm -rf {} ';'
 	find . -prune -name ".eggs" -type d -exec rm -rf {} ';'

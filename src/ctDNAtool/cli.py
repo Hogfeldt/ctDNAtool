@@ -39,6 +39,7 @@ def bin_genome(genome_ref_file, output_file, mbp, include_x):
 @click.option("-o", "--output_file")
 @cli_common.include_x
 def bin_genome_chromosome(genome_ref_file, output_file, include_x):
+    """This command will create a bed file, splitting the genome in bins of chromosomes."""
     chromosomes = Chromosomes.AUTOSOMES_X if include_x else Chromosomes.AUTOSOMES
     preprocessors.bin_genome_chromosome(genome_ref_file, output_file, chromosomes)
 
@@ -99,11 +100,16 @@ def generate_mate_length_end_seq(
 
 @cli.command()
 @click.argument("sample_files", nargs=-1)
+@cli_common.file_of_files
 @click.option("-o", "--output-file", default="collapsed_samples.pickle")
 @click.option("--uint32", is_flag=True)
-def sample_sum(sample_files, output_file, uint32):
-    if len(sample_files) > 0:
-        manipulations.sample_sum(sample_files, output_file, uint32)
+def sample_sum(sample_files, file_of_files, output_file, uint32):
+    if file_of_files:
+        files = _get_files_from_file(file_of_files)
+        manipulations.sample_sum(files, output_file, uint32)
+    else:
+        if len(sample_files) > 0:
+            manipulations.sample_sum(sample_files, output_file, uint32)
 
 
 @cli.command()
@@ -120,6 +126,20 @@ def region_sum(sample_file, output_file):
 @cli_common.max_length
 def convert_to_tsv_length(input_file, output_file, min_length, max_length):
     manipulations.convert_to_tsv_length(input_file, output_file, min_length, max_length)
+
+
+@cli.command()
+@click.option("-o", "--output-file", default="combined_data.pickle")
+@cli_common.file_of_files
+@click.argument("input_files", nargs=-1)
+def combine_data(output_file, file_of_files, input_files):
+    """Combines multiple .pickle files with Data objects into one. Can optionally take a file of files as input"""
+
+    if file_of_files:
+        files = _get_files_from_file(file_of_files)
+        manipulations.combine_data(output_file, files)
+    else:
+        manipulations.combine_data(output_file, input_files)
 
 
 @cli.command()
@@ -145,3 +165,11 @@ def pick_subset(input_sample, ids_file, output_file):
 @cli_common.stride
 def binning(input_matrix, output_file, bin_size, stride):
     manipulations.binning(input_matrix, output_file, bin_size, stride)
+
+
+def _get_files_from_file(file_of_files):
+    with open(file_of_files, "r") as f:
+        files = f.read().splitlines()
+        files = [file for file in files if file != "" and not file.isspace()]
+
+        return files
