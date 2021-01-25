@@ -124,10 +124,18 @@ def convert_to_tsv_length(input_file, output_file, min_length, max_length):
 
 @cli.command()
 @click.option("-o", "--output-file", default="combined_data.pickle")
+@click.option("-f", "--file-of-files")
 @click.argument("input_files", nargs=-1)
-def combine_data(output_file, input_files):
+def combine_data(output_file, file_of_files, input_files):
     """Combines multiple .pickle files with Data objects into one"""
-    manipulations.combine_data(output_file, input_files)
+
+    if file_of_files:
+        f = open(file_of_files, "r")
+        files = f.read().splitlines()
+        files = [file for file in files if file != "" and not file.isspace()]
+        manipulations.combine_data(output_file, files)
+    else:
+        manipulations.combine_data(output_file, input_files)
 
 
 @cli.command()

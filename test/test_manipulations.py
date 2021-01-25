@@ -131,9 +131,7 @@ class Test_combine_data:
             data2_file,
             output_file,
         ) = self._generate_test_data_2dim()
-        data2 = data.Data(
-            np.array([[40], [50], [60]]), np.array(["chr1", "chr2", "chr3"]), None
-        )
+        data2 = data.Data(np.array([[40], [50], [60]]), ["chr1", "chr2", "chr3"], None)
         data2_file = _write_temp_data_file(data2)
 
         with pytest.raises(AssertionError):
@@ -150,7 +148,7 @@ class Test_combine_data:
         ) = self._generate_test_data_2dim()
         data2 = data.Data(
             np.array([[40, 44], [50, 55], [60, 60]]),
-            np.array(["chr1", "chr2", "WRONG_REGION_ID"]),
+            ["chr1", "chr2", "WRONG_REGION_ID"],
             None,
         )
         data2_file = _write_temp_data_file(data2)
@@ -162,12 +160,12 @@ class Test_combine_data:
     def _generate_test_data_2dim():
         data1 = data.Data(
             np.array([[10, 11], [20, 22], [0, 0]]),
-            np.array(["chr1", "chr2", "chr3"]),
+            ["chr1", "chr2", "chr3"],
             None,
         )
         data2 = data.Data(
             np.array([[40, 44], [0, 0], [60, 66]]),
-            np.array(["chr1", "chr2", "chr3"]),
+            ["chr1", "chr2", "chr3"],
             None,
         )
         data1_file = _write_temp_data_file(data1)
@@ -186,7 +184,7 @@ class Test_combine_data:
                     [[300, 301], [330, 3333]],
                 ]
             ),
-            np.array(["chr1", "chr2", "chr3"]),
+            ["chr1", "chr2", "chr3"],
             None,
         )
         data2 = data.Data(
@@ -197,7 +195,7 @@ class Test_combine_data:
                     [[600, 606], [660, 666]],
                 ]
             ),
-            np.array(["chr1", "chr2", "chr3"]),
+            ["chr1", "chr2", "chr3"],
             None,
         )
         data1_file = _write_temp_data_file(data1)
@@ -216,7 +214,7 @@ class Test_combine_data:
                     csr_matrix([[300, 301], [330, 3333]]),
                 ]
             ),
-            np.array(["chr1", "chr2", "chr3"]),
+            ["chr1", "chr2", "chr3"],
             None,
         )
         data2 = data.Data(
@@ -227,7 +225,7 @@ class Test_combine_data:
                     csr_matrix([[600, 606], [660, 666]]),
                 ]
             ),
-            np.array(["chr1", "chr2", "chr3"]),
+            ["chr1", "chr2", "chr3"],
             None,
         )
         data1_file = _write_temp_data_file(data1)
