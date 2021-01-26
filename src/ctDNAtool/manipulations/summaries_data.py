@@ -1,7 +1,5 @@
 import numpy as np
 
-from ..data import Data
-
 
 def summaries_data(data, flank):
     """This function will given a Data instance and flank find flank amount of base pairs on each end of the sample

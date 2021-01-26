@@ -17,12 +17,20 @@ def cli(quiet, debug):
 
 @cli.command()
 @click.argument("annotation_input_file")
-@click.option("-k", "--region-size", default=10000, type=click.IntRange(min=0), help="Size of region around tss")
+@click.option(
+    "-k",
+    "--region-size",
+    default=10000,
+    type=click.IntRange(min=0),
+    help="Size of region around tss",
+)
 @click.option("--bed-output-file", default="transcription_start_sites.bed")
 @click.option("--tss-output-file", default="transcription_start_sites.tsv")
 def find_tss(annotation_input_file, region_size, bed_output_file, tss_output_file):
     """Finds all Transcription Start Sites given an annotation file."""
-    preprocessors.find_tss(annotation_input_file, region_size, bed_output_file, tss_output_file)
+    preprocessors.find_tss(
+        annotation_input_file, region_size, bed_output_file, tss_output_file
+    )
 
 
 @cli.command()

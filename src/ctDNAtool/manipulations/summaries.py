@@ -1,5 +1,3 @@
-import numpy as np
-
 from ..manipulations.summaries_data import summaries_data
 from ..data import Data
 
