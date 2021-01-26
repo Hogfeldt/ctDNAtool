@@ -99,7 +99,7 @@ def generate_length_end_seq(
 def generate_mate_length_end_seq(
     bam_file, bed_file, reference_genome, output_file, max_length, flank, map_quality
 ):
-    """Create a tensor where the first dim. represents a whether a read came from the first or the second mate"""
+    """Create a tensor with length and end sequence data, where the first dimension represents whether a read came from the first or the second mate"""
     generators.mate_length_end_seqs(
         bam_file,
         bed_file,
