@@ -16,7 +16,7 @@ def length_end_seqs(
 ):
     """Create a tensor where the first dim. represents a region from the bed file,
     the second dim. represent read lengths from 1 to max_length and the third dim.
-    represents the the concatenation of the sequenses at the fragment ends, taken
+    represents the the concatenation of the sequences at the fragment ends, taken
     from the reference genome, endcoded as an index. Then length of an end sequence
     is 2 times the flank parameter.
 

@@ -1,5 +1,4 @@
-import numpy as np
-
+from ..manipulations.summaries_data import summaries_data
 from ..data import Data
 
 
@@ -14,19 +13,6 @@ def summaries(sample_file, flank):
     """
     sample_id = sample_file.split("/")[-1].replace(".pickle", "")
     data = Data.read(sample_file).data.sum(axis=0)
-    nonzero = data.nonzero()
-    seq_pairs = zip(np.array(data[nonzero])[0], nonzero[1])
-    counts = np.zeros((4, 2 * flank))
-    for n, kmer in seq_pairs:
-        # End sequence
-        for i in reversed(range(2 * flank)):
-            nucl = kmer % 4
-            counts[nucl, i] += n
-            kmer //= 4
-        # Start sequence
-        for i in reversed(range(2 * flank)):
-            nucl = kmer % 4
-            counts[nucl, i] += n
-            kmer //= 4
-    freqs = counts / counts.sum(axis=0)
+
+    counts, freqs = summaries_data(data, flank)
     return sample_id, counts, freqs

@@ -15,11 +15,20 @@ To see which commands are available and how to use them, use the `--help` flag a
 ```
 $ ctDNAflow --help
 ```
+or
+```
+$ ctDNAtool --help
+```
 
 ## Testing
-To let nox run the test suite, check for formatting and linting errors, run:
+To run the test suite with nox, check for formatting and linting errors, run:
 ```
 $ make test
+```
+
+To run just the linter, run:
+```
+$ make lint
 ```
 
 ## Debugging
@@ -30,7 +39,7 @@ $ ctDNAtool -d <COMMAND>
 
 # ctDNAflow
 ctDNAflow is a tool for running workflows, based on the commands found in ctDNAtool.
-The workflows are compositions of multiple commands from ctDNAtool, and are design for ease of use.
+The workflows are compositions of multiple commands from ctDNAtool, and are designed with usability in mind.
 
 Usage:
 
@@ -45,7 +54,7 @@ The following is an example of an invocation of the command length-data-chr-bin.
 a BAM file and bins it in chromosomes, then writes the output to a .tsv file.
 
 ```
-ctDNAflow length-data-chr-bin hg19.2bit sample.bam -o length_data.tsv
+$ ctDNAflow length-data-chr-bin hg19.2bit sample.bam -o length_data.tsv
 ```
 
 In the example above, the output is directed to the length_data.tsv file. 
@@ -55,7 +64,7 @@ Further documentation can be found by passing --help after ctDNAflow, or after a
 specific command.
 
 ## Output
-The output of the commands a writen to either a .pickle or .tsv file. For the commands concerning only length data, the default
+The output of the commands are written to either a .pickle or .tsv file. For the commands concerning only length data, the default
 action is to write the output to a .tsv file. The output can be written to a .picke file by passing the -p flag.
 For all other commands, the output is written to .pickle.
 The output can be directed using the -o option. If this is not provided, the output will be written to a default filename.
