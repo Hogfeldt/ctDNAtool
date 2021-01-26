@@ -49,7 +49,7 @@ def bin_genome(genome_ref_file, output_file, mbp, include_x):
 @click.option("-o", "--output_file")
 @cli_common.include_x
 def bin_genome_chromosome(genome_ref_file, output_file, include_x):
-    """Creates a bed file, splitting the genome in bins of chromosomes"""
+    """Creates a bed file, splitting the genome into bins, where each bin corresponds to a chromosome"""
     chromosomes = Chromosomes.AUTOSOMES_X if include_x else Chromosomes.AUTOSOMES
     preprocessors.bin_genome_chromosome(genome_ref_file, output_file, chromosomes)
 
@@ -61,7 +61,7 @@ def bin_genome_chromosome(genome_ref_file, output_file, include_x):
 @cli_common.max_length
 @cli_common.map_quality
 def generate_length(bam_file, bed_file, output_file, max_length, map_quality):
-    """Creates a tensor with length data"""
+    """Creates a tensor with fragment length data"""
     generators.length_matrix(bam_file, bed_file, output_file, max_length, map_quality)
 
 

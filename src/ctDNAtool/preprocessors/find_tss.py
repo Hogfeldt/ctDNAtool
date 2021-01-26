@@ -55,7 +55,7 @@ def determine_TSS_and_format_data(tx_anno):
     )
 
 
-def find_tss(annotation_file, region_size, bed_file, tss_file):
+def find_tss(annotation_file, region_size, bed_output_file, tss_output_file):
     """This function will given a gencode annotation file, find all transcripts
     and determine the Transcription Start Site (TSS) for the transcript.
     Information about the TSS will be stored in the tss file with metadata
@@ -66,10 +66,10 @@ def find_tss(annotation_file, region_size, bed_file, tss_file):
     :param region_size: Size of the region with the TSS in the center which
                         should be stored in the bed file
     :type region_size: int >= 0
-    :param bed_file: File path to the bed file
-    :type bed_file: str
-    :param tss_file: File path to the tss file
-    :type tss_file: str
+    :param bed_output_file: File path to the bed file
+    :type bed_output_file: str
+    :param tss_output_file: File path to the tss file
+    :type tss_output_file: str
     :returns:  None
     """
     tx_annotations = get_transcript_annotations(annotation_file)
@@ -82,11 +82,11 @@ def find_tss(annotation_file, region_size, bed_file, tss_file):
             TSS_dict[tss.tss_id].tx_ids += tss.tx_ids
         else:
             TSS_dict[tss.tss_id] = tss
-    with open(bed_file, "w") as fp_bed:
+    with open(bed_output_file, "w") as fp_bed:
         bed_writer = tsv_writer(fp_bed)
         bed_writer.writerow(["#chrom", "start", "end", "name", "score", "strand"])
         k = int(region_size / 2)
-        with open(tss_file, "w") as fp_tss:
+        with open(tss_output_file, "w") as fp_tss:
             fp_tss.write("#%s\n" % get_header())
             for tss_id in TSS_dict.keys():
                 tss = TSS_dict[tss_id]
@@ -98,4 +98,4 @@ def find_tss(annotation_file, region_size, bed_file, tss_file):
                     [tss.chrom, region_start, region_end, tss_id, 0, tss.strand]
                 )
                 fp_tss.write("%s\n" % str(TSS_dict[tss_id]))
-    return bed_file, tss_file
+    return bed_output_file, tss_output_file
