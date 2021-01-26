@@ -55,14 +55,14 @@ def determine_TSS_and_format_data(tx_anno):
     )
 
 
-def find_tss(input_file, region_size, bed_file, tss_file):
+def find_tss(annotation_file, region_size, bed_file, tss_file):
     """This function will given a gencode annotation file, find all transcripts
     and determine the Transcription Start Site (TSS) for the transcript.
     Information about the TSS will be stored in the tss file with metadata
     and a bed file which can be used as input for the generator.
 
-    :param input_file: File path to the gencode annotation file
-    :type input_file: str
+    :param annotation_file: File path to the gencode annotation file
+    :type annotation_file: str
     :param region_size: Size of the region with the TSS in the center which
                         should be stored in the bed file
     :type region_size: int >= 0
@@ -72,7 +72,7 @@ def find_tss(input_file, region_size, bed_file, tss_file):
     :type tss_file: str
     :returns:  None
     """
-    tx_annotations = get_transcript_annotations(input_file)
+    tx_annotations = get_transcript_annotations(annotation_file)
     TSS_dict = dict()
     for tx_anno in tx_annotations:
         tss = determine_TSS_and_format_data(tx_anno)
