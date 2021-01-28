@@ -249,6 +249,30 @@ class Test_combine_data:
         assert (data_combined.data[1][2].todense() == data2.data[2].todense()).all()
 
 
+class Test_region_sum:
+    def test_region_sum(self):
+        data1 = data.Data(
+            np.array(
+                [
+                    [[100, 101], [110, 111]],
+                    [[200, 202], [220, 222]],
+                    [[300, 301], [330, 3333]],
+                ]
+            ),
+            ["chr1", "chr2", "chr3"],
+            None,
+        )
+        data1_file = _write_temp_data_file(data1)
+        output_file = tempfile.NamedTemporaryFile().name
+
+        mut.region_sum(data1_file, output_file)
+        data_regions_summed = data.Data.read(output_file)
+
+        assert len(data_regions_summed.region_ids) == 1
+        assert (data_regions_summed.data[0] == np.array([600, 604])).all()
+        assert data_regions_summed.data.shape == (2, 2)
+
+
 def _write_temp_data_file(data1):
     file = tempfile.NamedTemporaryFile().name
     data.Data.write(data1, file)
