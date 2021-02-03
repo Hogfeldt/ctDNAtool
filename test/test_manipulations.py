@@ -159,14 +159,10 @@ class Test_combine_data:
     @staticmethod
     def _generate_test_data_2dim():
         data1 = data.Data(
-            np.array([[10, 11], [20, 22], [0, 0]]),
-            ["chr1", "chr2", "chr3"],
-            None,
+            np.array([[10, 11], [20, 22], [0, 0]]), ["chr1", "chr2", "chr3"], None
         )
         data2 = data.Data(
-            np.array([[40, 44], [0, 0], [60, 66]]),
-            ["chr1", "chr2", "chr3"],
-            None,
+            np.array([[40, 44], [0, 0], [60, 66]]), ["chr1", "chr2", "chr3"], None
         )
         data1_file = _write_temp_data_file(data1)
         data2_file = _write_temp_data_file(data2)
