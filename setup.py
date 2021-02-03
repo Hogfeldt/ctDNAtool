@@ -30,7 +30,7 @@ setup(
         "console_scripts": [
             "ctDNAtool = ctDNAtool.cli:cli",
             "ctDNAflow = ctDNAtool.cli_flow:cli_flow",
-        ],
+        ]
     },
     include_package_data=True,
     python_requires=">=3.6",
