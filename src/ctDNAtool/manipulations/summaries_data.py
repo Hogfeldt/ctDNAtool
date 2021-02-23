@@ -2,7 +2,7 @@ import numpy as np
 
 
 def summaries_data(data, flank):
-    """This function will given a Data instance and flank find flank amount of base pairs on each end of the sample
+    """This function will given a numpy array and flank find flank amount of base pairs on each end of the sample
     and return count of each base pair and frequency of each base pair
 
     :param data instance containing data

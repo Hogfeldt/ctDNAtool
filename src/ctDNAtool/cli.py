@@ -92,6 +92,29 @@ def generate_length_end_seq(
 @click.argument("bam_file")
 @click.argument("bed_file")
 @click.argument("reference_genome")
+@click.option("-o", "--output-file", default="length_seq_matrix.pickle")
+@cli_common.max_length
+@cli_common.flank
+@cli_common.map_quality
+def generate_length_end_seq_marginal(
+    bam_file, bed_file, reference_genome, output_file, max_length, flank, map_quality
+):
+    """Creates a tensor with length and marginal end sequence data"""
+    generators.length_end_seqs_marginal(
+        bam_file,
+        bed_file,
+        reference_genome,
+        output_file,
+        max_length,
+        flank,
+        map_quality,
+    )
+
+
+@cli.command()
+@click.argument("bam_file")
+@click.argument("bed_file")
+@click.argument("reference_genome")
 @click.option("-o", "--output-file", default="length_matrix.pickle")
 @cli_common.max_length
 @cli_common.flank
