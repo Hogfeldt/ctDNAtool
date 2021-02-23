@@ -5,4 +5,10 @@ from .mate_length_end_seqs import mate_length_end_seqs
 from .bam import BAM
 
 
-__all__ = ["length_matrix", "length_end_seqs", "length_end_seqs_marginal", "mate_length_end_seqs", "BAM"]
+__all__ = [
+  "length_matrix",
+  "length_end_seqs",
+  "length_end_seqs_marginal",
+  "mate_length_end_seqs",
+  "BAM",
+]
