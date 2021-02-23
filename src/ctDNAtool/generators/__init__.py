@@ -6,9 +6,9 @@ from .bam import BAM
 
 
 __all__ = [
-  "length_matrix",
-  "length_end_seqs",
-  "length_end_seqs_marginal",
-  "mate_length_end_seqs",
-  "BAM",
+    "length_matrix",
+    "length_end_seqs",
+    "length_end_seqs_marginal",
+    "mate_length_end_seqs",
+    "BAM",
 ]
