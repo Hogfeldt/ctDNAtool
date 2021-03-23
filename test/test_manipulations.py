@@ -16,7 +16,9 @@ class Test_stride_binning:
         X = np.ones((20, 5))
         bin_size = 1
         stride = 1
+
         R = mut.stride_binning(X, bin_size, stride)
+
         assert np.array_equal(X, R) is True
 
     def test_binsize_eq_stride(self):
@@ -26,7 +28,9 @@ class Test_stride_binning:
         X = np.ones((20, 5))
         bin_size = 5
         stride = 5
+
         R = mut.stride_binning(X, bin_size, stride)
+
         T = np.array([5 for _ in range(4 * 5)], dtype=X.dtype).reshape((4, 5))
         assert np.array_equal(R, T) is True
 
@@ -35,7 +39,9 @@ class Test_stride_binning:
         X = np.ones((20, 5))
         bin_size = 5
         stride = 2
+
         R = mut.stride_binning(X, bin_size, stride)
+
         T = np.array(
             [5 for _ in range(8 * 5)] + [4 for _ in range(5)], dtype=X.dtype
         ).reshape((9, 5))
@@ -46,7 +52,9 @@ class Test_stride_binning:
         X = np.ones((20, 5))
         bin_size = 1
         stride = 2
+
         R = mut.stride_binning(X, bin_size, stride)
+
         T = np.array([1 for _ in range(10 * 5)], dtype=X.dtype).reshape((10, 5))
         assert np.array_equal(R, T) is True
 
@@ -59,7 +67,9 @@ class Test_stride_binning:
         X = np.ones((15, 5))
         bin_size = 5
         stride = 3
+
         R = mut.stride_binning(X, bin_size, stride)
+
         T = np.array(
             [5 for _ in range(4 * 5)] + [3 for _ in range(5)], dtype=X.dtype
         ).reshape((5, 5))
