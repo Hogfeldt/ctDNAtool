@@ -23,7 +23,9 @@ def stride_binning(X, bin_size, stride):
     for i in range(n_bins):
         start = i * stride
         end = start + bin_size
-        R[i] = np.sum(X[start:end], axis=0)
+        R[i] = np.sum(
+            X[start:end], axis=0
+        )  # numpy caps indexing if end exceeds length of array
     return R
 
 
